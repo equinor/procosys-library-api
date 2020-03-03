@@ -26,7 +26,7 @@ namespace Equinor.Procosys.Library.Query.Client
         public async Task<T> QueryAndDeserialize<T>(string url)
         {
             var httpClient = _httpClientFactory.CreateClient();
-            httpClient.DefaultRequestHeaders.Authorization = new AuthenticationHeaderValue("Bearer", _bearerTokenProvider.GetBearerToken());
+            httpClient.DefaultRequestHeaders.Authorization = new AuthenticationHeaderValue("Bearer", await _bearerTokenProvider.GetBearerTokenAsync());
 
             var stopWatch = Stopwatch.StartNew();
             var response = await httpClient.GetAsync(url);

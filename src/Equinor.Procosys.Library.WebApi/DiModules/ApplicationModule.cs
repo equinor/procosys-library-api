@@ -10,6 +10,7 @@ namespace Equinor.Procosys.Library.WebApi.DIModules
     {
         public static void AddApplicationModules(this IServiceCollection services, IConfiguration configuration)
         {
+            services.Configure<ApiOptions>(configuration.GetSection("API"));
             services.Configure<MainApiOptions>(configuration.GetSection("MainApi"));
 
             //services.AddDbContext<LibraryContext>(options =>
@@ -25,7 +26,7 @@ namespace Equinor.Procosys.Library.WebApi.DIModules
 
             // Scoped - Created once per client request (connection)
             services.AddScoped<IBearerTokenApiClient, BearerTokenApiClient>();
-            services.AddScoped<IBearerTokenProvider, RequestBearerTokenProvider>();
+            services.AddScoped<IBearerTokenProvider, MainApiBearerTokenProvider>();
             //services.AddScoped<IEventDispatcher, EventDispatcher>();
             //services.AddScoped<IUnitOfWork>(x => x.GetRequiredService<LibraryContext>());
             //services.AddScoped<IReadOnlyContext>(x => x.GetRequiredService<LibraryContext>());

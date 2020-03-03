@@ -1,7 +1,9 @@
-﻿namespace Equinor.Procosys.Library.Query.Client
+﻿using System.Threading.Tasks;
+
+namespace Equinor.Procosys.Library.Query.Client
 {
     public interface IBearerTokenProvider
     {
-        string GetBearerToken();
+        Task<string> GetBearerTokenAsync();
     }
 }
