@@ -2,7 +2,7 @@
 {
     public class MainApiOptions
     {
-        public string ClientId { get; set; }
+        public string Audience { get; set; }
         public string ApiVersion { get; set; }
         public string BaseAddress { get; set; }
     }

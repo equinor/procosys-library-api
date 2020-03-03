@@ -25,7 +25,7 @@ namespace Equinor.Procosys.Library.WebApi.Misc
             _clientId = apiOptions.CurrentValue.Audience;
             _clientSecret = apiOptions.CurrentValue.ClientSecret;
 
-            _mainApiClientId = mainApiOptions.CurrentValue.ClientId;
+            _mainApiClientId = mainApiOptions.CurrentValue.Audience;
         }
 
         public async Task<string> GetBearerTokenAsync()
