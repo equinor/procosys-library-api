@@ -17,13 +17,13 @@ namespace Equinor.Procosys.Library.Domain.Tests
         }
 
         [TestMethod]
-        public void Setup_ThrowsException_WhenProviderIsNull()
+        public void SetProvider_ThrowsException_WhenProviderIsNull()
         {
             Assert.ThrowsException<ArgumentNullException>(() => TimeService.SetProvider(null));
         }
 
         [TestMethod]
-        public void Setup_ThrowsException_WhenProviderDoesNotReturnTimeInUtc()
+        public void SetProvider_ThrowsException_WhenProviderDoesNotReturnTimeInUtc()
         {
             Assert.ThrowsException<ArgumentException>(() => TimeService.SetProvider(new InvalidTimeProvider()));
         }

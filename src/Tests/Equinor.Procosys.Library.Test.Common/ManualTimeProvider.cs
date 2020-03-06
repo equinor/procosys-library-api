@@ -1,9 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Text;
-using Equinor.Procosys.Library.Domain.Time;
-
-namespace Equinor.Procosys.Library.Test.Common
+﻿namespace Equinor.Procosys.Library.Test.Common
 {
     public class ManualTimeProvider : ITimeProvider
     {
@@ -25,6 +20,6 @@ namespace Equinor.Procosys.Library.Test.Common
 
         public void Elapse(TimeSpan elapsedTime) => UtcNow += elapsedTime;
 
-        public void SetTime(DateTime now) => UtcNow = now;
+        public void Set(DateTime now) => UtcNow = now;
     }
 }
