@@ -1,4 +1,4 @@
-﻿using Equinor.Procosys.Library.Domain;
+﻿using Equinor.Procosys.Library.Domain.Time;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Logging;
