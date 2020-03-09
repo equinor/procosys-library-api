@@ -117,8 +117,6 @@ namespace Equinor.Procosys.Library.WebApi
                     }
                 });
 
-                //c.OperationFilter<AddSchemaHeaderParameter>();
-
                 c.AddFluentValidationRules();
             });
 
