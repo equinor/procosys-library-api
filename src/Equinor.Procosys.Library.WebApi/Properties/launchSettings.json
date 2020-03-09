@@ -5,16 +5,7 @@
       "environmentVariables": {
         "ASPNETCORE_ENVIRONMENT": "Development"
       },
-      "applicationUrl": "http://localhost:47400"
-    },
-    "Docker": {
-      "commandName": "Docker",
-      "launchBrowser": false,
-      "launchUrl": "{Scheme}://{ServiceHost}:{ServicePort}",
-      "environmentVariables": {
-        "ASPNETCORE_URLS": "http://+:5000"
-      },
-      "httpPort": 5000
+      "applicationUrl": "http://localhost:47402"
     }
   }
 }
