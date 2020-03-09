@@ -4,6 +4,8 @@ WORKDIR /src
 # Copy solution and project files separately and restore NuGet packages to create layers
 COPY *.sln .
 
+COPY Tests/Equinor.Procosys.Library.Test.Common/*.csproj ./Tests/Equinor.Procosys.Library.Test.Common/
+
 COPY Equinor.Procosys.Library.Command/*.csproj ./Equinor.Procosys.Library.Command/
 COPY Tests/Equinor.Procosys.Library.Command.Tests/*.csproj ./Tests/Equinor.Procosys.Library.Command.Tests/
 
