@@ -8,4 +8,4 @@ services:
       context: .
       dockerfile: Equinor.Procosys.Library.WebApi/Dockerfile
     ports:
-      - "8080:80"
+      - "5000:5000"
