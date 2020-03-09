@@ -1,4 +1,7 @@
-﻿namespace Equinor.Procosys.Library.Test.Common
+﻿using System;
+using Equinor.Procosys.Library.Domain.Time;
+
+namespace Equinor.Procosys.Library.Test.Common
 {
     public class ManualTimeProvider : ITimeProvider
     {
@@ -10,7 +13,7 @@
         {
             if (now.Kind != DateTimeKind.Utc)
             {
-                throw new ArgumentException("Must be UTC");
+                throw new ArgumentException("Time must be UTC");
             }
 
             UtcNow = now;
@@ -20,6 +23,14 @@
 
         public void Elapse(TimeSpan elapsedTime) => UtcNow += elapsedTime;
 
-        public void Set(DateTime now) => UtcNow = now;
+        public void Set(DateTime now)
+        {
+            if (now.Kind != DateTimeKind.Utc)
+            {
+                throw new ArgumentException("Time must be UTC");
+            }
+
+            UtcNow = now;
+        }
     }
 }
