@@ -1,4 +1,5 @@
-﻿using Equinor.Procosys.Library.Query.Client;
+﻿using Equinor.Procosys.Library.Domain.Time;
+using Equinor.Procosys.Library.Query.Client;
 using Equinor.Procosys.Library.WebApi.Misc;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
@@ -31,6 +32,9 @@ namespace Equinor.Procosys.Library.WebApi.DIModules
             //services.AddScoped<IReadOnlyContext>(x => x.GetRequiredService<LibraryContext>());
 
             // Singleton - Created the first time they are requested
+
+
+            TimeService.SetProvider(new SystemTimeProvider());
         }
     }
 }
