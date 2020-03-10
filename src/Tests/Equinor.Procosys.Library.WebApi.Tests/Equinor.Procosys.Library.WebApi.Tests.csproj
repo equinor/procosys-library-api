@@ -21,8 +21,4 @@
     <ProjectReference Include="..\..\Equinor.Procosys.Library.WebApi\Equinor.Procosys.Library.WebApi.csproj" />
   </ItemGroup>
 
-  <ItemGroup>
-    <Folder Include="Controllers\" />
-  </ItemGroup>
-
 </Project>

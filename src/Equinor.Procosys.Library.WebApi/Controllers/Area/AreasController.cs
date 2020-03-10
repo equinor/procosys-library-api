@@ -17,7 +17,7 @@ namespace Equinor.Procosys.Library.WebApi.Controllers.Area
         public AreasController(IMediator mediator) => _mediator = mediator;
 
         [HttpGet]
-        public async Task<ActionResult<IEnumerable<AreaDto>>> GetAllAreas([FromHeader( Name = PlantProvider.PlantHeader)] string plant)
+        public async Task<ActionResult<IEnumerable<AreaDto>>> GetAllAreasAsync([FromHeader( Name = PlantProvider.PlantHeader)] string plant)
         {
             var result = await _mediator.Send(new GetAllAreasQuery(plant));
             return this.FromResult(result);
