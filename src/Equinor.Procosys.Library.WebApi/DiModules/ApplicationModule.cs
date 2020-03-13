@@ -1,9 +1,6 @@
-﻿using Equinor.Procosys.Library.Command.EventHandlers;
-using Equinor.Procosys.Library.Domain;
-using Equinor.Procosys.Library.Domain.Events;
-using Equinor.Procosys.Library.Infrastructure;
+﻿using Equinor.Procosys.Library.Domain.Time;
+using Equinor.Procosys.Library.Query.Client;
 using Equinor.Procosys.Library.WebApi.Misc;
-using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 
@@ -13,10 +10,13 @@ namespace Equinor.Procosys.Library.WebApi.DIModules
     {
         public static void AddApplicationModules(this IServiceCollection services, IConfiguration configuration)
         {
-            services.AddDbContext<LibraryContext>(options =>
-            {
-                options.UseSqlServer(configuration.GetConnectionString("LibraryContext"));
-            });
+            services.Configure<ApiOptions>(configuration.GetSection("API"));
+            services.Configure<MainApiOptions>(configuration.GetSection("MainApi"));
+
+            //services.AddDbContext<LibraryContext>(options =>
+            //{
+            //    options.UseSqlServer(configuration.GetConnectionString("LibraryContext"));
+            //});
 
             services.AddHttpContextAccessor();
             services.AddHttpClient();
@@ -25,13 +25,16 @@ namespace Equinor.Procosys.Library.WebApi.DIModules
 
 
             // Scoped - Created once per client request (connection)
-            services.AddScoped<IPlantProvider, PlantProvider>();
-            services.AddScoped<IEventDispatcher, EventDispatcher>();
-            services.AddScoped<IUnitOfWork>(x => x.GetRequiredService<LibraryContext>());
-            services.AddScoped<IReadOnlyContext>(x => x.GetRequiredService<LibraryContext>());
+            services.AddScoped<IBearerTokenApiClient, BearerTokenApiClient>();
+            services.AddScoped<IBearerTokenProvider, MainApiBearerTokenProvider>();
+            //services.AddScoped<IEventDispatcher, EventDispatcher>();
+            //services.AddScoped<IUnitOfWork>(x => x.GetRequiredService<LibraryContext>());
+            //services.AddScoped<IReadOnlyContext>(x => x.GetRequiredService<LibraryContext>());
 
             // Singleton - Created the first time they are requested
-            services.AddSingleton<ITimeService, TimeService>();
+
+
+            TimeService.SetProvider(new SystemTimeProvider());
         }
     }
 }

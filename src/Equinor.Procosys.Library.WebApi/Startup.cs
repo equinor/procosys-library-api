@@ -7,6 +7,7 @@ using Equinor.Procosys.Library.Command;
 using Equinor.Procosys.Library.Query;
 using Equinor.Procosys.Library.WebApi.DIModules;
 using Equinor.Procosys.Library.WebApi.Middleware;
+using Equinor.Procosys.Library.WebApi.Validation;
 using FluentValidation.AspNetCore;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.AspNetCore.Authorization;
@@ -38,13 +39,13 @@ namespace Equinor.Procosys.Library.WebApi
         // This method gets called by the runtime. Use this method to add services to the container.
         public void ConfigureServices(IServiceCollection services)
         {
-            if (_environment.IsDevelopment())
-            {
-                if (Configuration.GetValue<bool>("MigrateDatabase"))
-                {
-                    services.AddHostedService<DatabaseMigrator>();
-                }
-            }
+            //if (_environment.IsDevelopment())
+            //{
+            //    if (Configuration.GetValue<bool>("MigrateDatabase"))
+            //    {
+            //        services.AddHostedService<DatabaseMigrator>();
+            //    }
+            //}
 
             services.AddAuthentication(JwtBearerDefaults.AuthenticationScheme)
                 .AddJwtBearer(options =>
@@ -70,22 +71,17 @@ namespace Equinor.Procosys.Library.WebApi
                     .RequireAuthenticatedUser()
                     .Build();
                 config.Filters.Add(new AuthorizeFilter(policy));
-            }).AddJsonOptions(options => options.JsonSerializerOptions.Converters.Add(new JsonStringEnumConverter()));
-
-            services.AddControllers()
-                .AddFluentValidation(fv =>
+            })
+            .ConfigureApiBehaviorOptions(options =>
+            {
+                options.InvalidModelStateResponseFactory = actionContext =>
                 {
-                    fv.RegisterValidatorsFromAssemblies
-                    (
-                        new List<Assembly>
-                        {
-                            typeof(IQueryMarker).GetTypeInfo().Assembly,
-                            typeof(ICommandMarker).GetTypeInfo().Assembly,
-                            typeof(Startup).Assembly,
-                        }
-                    );
-                    fv.RunDefaultMvcValidationAfterFluentValidationExecutes = false;
-                });
+                    return new ValidationFailedResult(actionContext.ModelState);
+                };
+            })
+            .AddJsonOptions(options => options.JsonSerializerOptions.Converters.Add(new JsonStringEnumConverter()));
+
+            services.AddControllers();
 
             var scopes = Configuration.GetSection("Swagger:Scopes")?.Get<Dictionary<string, string>>() ?? new Dictionary<string, string>();
             services.AddSwaggerGen(c =>
@@ -116,10 +112,6 @@ namespace Equinor.Procosys.Library.WebApi
                         scopes.Keys.ToArray()
                     }
                 });
-
-                c.OperationFilter<AddSchemaHeaderParameter>();
-
-                c.AddFluentValidationRules();
             });
 
             services.AddResponseCompression(options =>

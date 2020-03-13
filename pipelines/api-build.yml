@@ -1,0 +1,59 @@
+trigger:
+  branches:
+    include:
+      - master
+
+resources:
+  repositories:
+  - repository: self
+  - repository: templates
+    type: github
+    name: equinor/procosys-preservation-infra
+    endpoint: 'procosys - github'
+
+# Global variables for the pipeline
+variables:
+ - template: templates/variables/library-variables.yml@templates
+ - template: templates/variables/procosys-global-variables.yml@templates
+
+ # Container Registry
+ - name: 'repositoryName'
+   value: 'library/api'
+
+stages:
+# build stage. Docker build, tag and push
+- stage: build
+  displayName: 'Build'
+  variables:
+    envName: 'build'
+    envRg: '${{ variables.envRgName }}'
+    containerRegistry: '${{ variables.containerRegistryName }}'
+    envGroupName: '$(globalPrefix)-$(fullAppName)-${{ variables.envName }}'
+    dockerRegistryServiceConnection: '$(dockerRegistryServiceConnectionName)'
+    dockerfilePath: '$(Build.SourcesDirectory)/src/Equinor.Procosys.Library.WebApi/Dockerfile'
+
+  jobs:
+  - template: /templates/pipelines/dockerbuild.yml@templates
+    parameters:
+      deploymentName: 'docker_build_push'
+      dependsOn: ''
+      env: 'pcs-${{ variables.envName }}'
+      envGroup: '${{ variables.envGroupName }}'
+      dockerfilePath: ${{ variables.dockerfilePath }}
+      buildContext: '$(Build.SourcesDirectory)/src'
+      repository: ${{ variables.repositoryName }}
+      dockerRegistryServiceConnection: $(dockerRegistryServiceConnectionName)
+
+# Dev deploy stage
+- stage: dev
+  displayName: 'Dev'
+  dependsOn: 'build'
+  condition: and(succeeded(), eq(variables['Build.SourceBranch'], 'refs/heads/master'))
+  variables:
+    envName: 'dev'
+    envRg: '${{ variables.envRgName }}'
+    envGroupName: '$(globalPrefix)-$(fullAppName)-${{ variables.envName }}'
+    serviceConnection: '${{ variables.nonProdServiceConnection }}'
+    appServicePlan: '${{ variables.nonProdappServicePlanName }}'
+    containerRegistry: '${{ variables.containerRegistryName }}' 
+    aspNetCoreEnvironment: 'Development'
