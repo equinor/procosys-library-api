@@ -1,4 +1,5 @@
 ﻿using System.Collections.Generic;
+using System.Linq;
 using Equinor.Procosys.Library.Query.GetAllDisciplines;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
 
@@ -24,6 +25,7 @@ namespace Equinor.Procosys.Library.Query.Tests.GetAllDisciplines
             var dut = new GetAllDisciplinesQuery("PCS$TESTPLANT", null);
 
             Assert.IsNotNull(dut.Classifications);
+            Assert.AreEqual(0, dut.Classifications.Count());
         }
     }
 }
