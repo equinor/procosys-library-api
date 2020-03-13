@@ -1,5 +1,6 @@
 ﻿using System.Collections.Generic;
 using System.Linq;
+using Equinor.Procosys.Library.Domain.Exceptions;
 using Microsoft.AspNetCore.Mvc.ModelBinding;
 
 namespace Equinor.Procosys.Library.WebApi.Validation
@@ -9,6 +10,15 @@ namespace Equinor.Procosys.Library.WebApi.Validation
         public string Message { get; }
 
         public List<ValidationError> Errors { get; }
+
+        public ValidationResultModel(DomainException domainException)
+        {
+            Message = "Error processing the request";
+            Errors = new List<ValidationError>
+            {
+                new ValidationError(null, domainException.Message)
+            };
+        }
 
         public ValidationResultModel(ModelStateDictionary modelState)
         {

@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Threading;
 using System.Threading.Tasks;
+using Equinor.Procosys.Library.Domain.Exceptions;
 using Equinor.Procosys.Library.Query.Client;
 using MediatR;
 using Microsoft.Extensions.Options;

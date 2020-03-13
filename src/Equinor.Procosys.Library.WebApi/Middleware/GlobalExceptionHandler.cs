@@ -4,6 +4,8 @@ using System.Linq;
 using System.Net;
 using System.Text.Json;
 using System.Threading.Tasks;
+using Equinor.Procosys.Library.Domain.Exceptions;
+using Equinor.Procosys.Library.WebApi.Validation;
 using Microsoft.AspNetCore.Http;
 using Microsoft.Extensions.Logging;
 
@@ -26,6 +28,14 @@ namespace Equinor.Procosys.Library.WebApi.Middleware
             {
                 // Call the next delegate/middleware in the pipeline
                 await _next(context);
+            }
+            catch (DomainException de)
+            {
+                var result = new ValidationFailedResult(de);
+                context.Response.StatusCode = result.StatusCode ?? (int)HttpStatusCode.InternalServerError;
+                context.Response.ContentType = "application/text";
+                var json = JsonSerializer.Serialize(result.Value);
+                await context.Response.WriteAsync(json);
             }
             catch (FluentValidation.ValidationException ve)
             {
