@@ -9,7 +9,7 @@ namespace Equinor.Procosys.Library.Query.GetAllDisciplines
         public GetAllDisciplinesQuery(string plant, IEnumerable<string> classifications)
         {
             Plant = plant;
-            Classifications = classifications;
+            Classifications = classifications ?? new List<string>();
         }
 
         public string Plant { get; }

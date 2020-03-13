@@ -89,6 +89,18 @@ namespace Equinor.Procosys.Library.Query.Tests.GetAllDisciplines
         }
 
         [TestMethod]
+        public async Task Handle_ReturnsAllElements_WhenNoClassificationsAreGiven()
+        {
+            var request = new GetAllDisciplinesQuery(Plant, null);
+
+            var dut = new GetAllDisciplinesQueryHandler(_clientMock.Object, _optionsMonitorMock.Object);
+
+            var result = await dut.Handle(_request, default);
+
+            Assert.AreEqual(2, result.Data.Count());
+        }
+
+        [TestMethod]
         public async Task Handle_ProjectsElementsCorrectly()
         {
             var dut = new GetAllDisciplinesQueryHandler(_clientMock.Object, _optionsMonitorMock.Object);

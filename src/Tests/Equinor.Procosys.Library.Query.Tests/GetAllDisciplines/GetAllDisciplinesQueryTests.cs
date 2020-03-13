@@ -17,5 +17,13 @@ namespace Equinor.Procosys.Library.Query.Tests.GetAllDisciplines
             Assert.AreEqual("PCS$TESTPLANT", dut.Plant);
             Assert.AreEqual(classifications, dut.Classifications);
         }
+
+        [TestMethod]
+        public void Constructor_CreatesEmptyList_WhenNoClassificationsAreGiven()
+        {
+            var dut = new GetAllDisciplinesQuery("PCS$TESTPLANT", null);
+
+            Assert.IsNotNull(dut.Classifications);
+        }
     }
 }
