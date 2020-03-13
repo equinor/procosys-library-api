@@ -16,7 +16,10 @@ namespace Equinor.Procosys.Library.Query.Tests.GetAllDisciplines
         private const string Plant = "PCS$TESTPLANT";
         private Mock<IBearerTokenApiClient> _clientMock;
         private Mock<IOptionsMonitor<MainApiOptions>> _optionsMonitorMock;
-        private GetAllDisciplinesQuery _request;
+        private GetAllDisciplinesQuery _requestWithClassifications;
+        private List<MainApiDiscipline> _disciplines;
+        private string _urlWithClassifications;
+        private string _urlWithoutClassifications;
 
         [TestInitialize]
         public void Setup()
@@ -39,16 +42,20 @@ namespace Equinor.Procosys.Library.Query.Tests.GetAllDisciplines
                 "ClassB"
             };
 
-            _request = new GetAllDisciplinesQuery(Plant, classifications);
+            _requestWithClassifications = new GetAllDisciplinesQuery(Plant, classifications);
 
-            var url = $"{options.BaseAddress}Library/Disciplines" +
+            _urlWithClassifications = $"{options.BaseAddress}Library/Disciplines" +
                 $"?plantId={Plant}" +
                 string.Join("", classifications
                     .Where(c => c != null)
                     .Select(c => $"&classifications={c.ToUpper()}")) +
                 $"&api-version={options.ApiVersion}";
 
-            var  disciplines = new List<MainApiDiscipline>
+            _urlWithoutClassifications = $"{options.BaseAddress}Library/Disciplines" +
+                $"?plantId={Plant}" +
+                $"&api-version={options.ApiVersion}";
+
+            _disciplines = new List<MainApiDiscipline>
                 {
                     new MainApiDiscipline
                     {
@@ -63,17 +70,18 @@ namespace Equinor.Procosys.Library.Query.Tests.GetAllDisciplines
                 };
 
             _clientMock = new Mock<IBearerTokenApiClient>();
-            _clientMock
-                .Setup(x => x.QueryAndDeserialize<List<MainApiDiscipline>>(url))
-                .Returns(Task.FromResult(disciplines));
         }
 
         [TestMethod]
         public async Task Handle_ReturnsOkResult()
         {
+            _clientMock
+                .Setup(x => x.QueryAndDeserialize<List<MainApiDiscipline>>(_urlWithClassifications))
+                .Returns(Task.FromResult(_disciplines));
+
             var dut = new GetAllDisciplinesQueryHandler(_clientMock.Object, _optionsMonitorMock.Object);
 
-            var result = await dut.Handle(_request, default);
+            var result = await dut.Handle(_requestWithClassifications, default);
 
             Assert.AreEqual(ResultType.Ok, result.ResultType);
         }
@@ -81,9 +89,13 @@ namespace Equinor.Procosys.Library.Query.Tests.GetAllDisciplines
         [TestMethod]
         public async Task Handle_ReturnsCorrectNumberOfElements()
         {
+            _clientMock
+                .Setup(x => x.QueryAndDeserialize<List<MainApiDiscipline>>(_urlWithClassifications))
+                .Returns(Task.FromResult(_disciplines));
+
             var dut = new GetAllDisciplinesQueryHandler(_clientMock.Object, _optionsMonitorMock.Object);
 
-            var result = await dut.Handle(_request, default);
+            var result = await dut.Handle(_requestWithClassifications, default);
 
             Assert.AreEqual(2, result.Data.Count());
         }
@@ -91,11 +103,15 @@ namespace Equinor.Procosys.Library.Query.Tests.GetAllDisciplines
         [TestMethod]
         public async Task Handle_ReturnsAllElements_WhenNoClassificationsAreGiven()
         {
+            _clientMock
+                .Setup(x => x.QueryAndDeserialize<List<MainApiDiscipline>>(_urlWithoutClassifications))
+                .Returns(Task.FromResult(_disciplines));
+
             var request = new GetAllDisciplinesQuery(Plant, null);
 
             var dut = new GetAllDisciplinesQueryHandler(_clientMock.Object, _optionsMonitorMock.Object);
 
-            var result = await dut.Handle(_request, default);
+            var result = await dut.Handle(request, default);
 
             Assert.AreEqual(2, result.Data.Count());
         }
@@ -103,9 +119,13 @@ namespace Equinor.Procosys.Library.Query.Tests.GetAllDisciplines
         [TestMethod]
         public async Task Handle_ProjectsElementsCorrectly()
         {
+            _clientMock
+                .Setup(x => x.QueryAndDeserialize<List<MainApiDiscipline>>(_urlWithClassifications))
+                .Returns(Task.FromResult(_disciplines));
+
             var dut = new GetAllDisciplinesQueryHandler(_clientMock.Object, _optionsMonitorMock.Object);
 
-            var result = await dut.Handle(_request, default);
+            var result = await dut.Handle(_requestWithClassifications, default);
 
             Assert.AreEqual("CodeA", result.Data.ElementAt(0).Code);
             Assert.AreEqual("DescriptionA", result.Data.ElementAt(0).Description);
@@ -122,7 +142,7 @@ namespace Equinor.Procosys.Library.Query.Tests.GetAllDisciplines
 
             var dut = new GetAllDisciplinesQueryHandler(_clientMock.Object, _optionsMonitorMock.Object);
 
-            var result = await dut.Handle(_request, default);
+            var result = await dut.Handle(_requestWithClassifications, default);
 
             Assert.AreEqual(0, result.Data.Count());
         }
