@@ -1,4 +1,5 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
 using MediatR;
 using ServiceResult;
 
@@ -8,7 +9,7 @@ namespace Equinor.Procosys.Library.Query.GetAllDisciplines
     {
         public GetAllDisciplinesQuery(string plant, IEnumerable<string> classifications)
         {
-            Plant = plant;
+            Plant = plant ?? throw new ArgumentNullException(nameof(plant));
             Classifications = classifications ?? new List<string>();
         }
 
