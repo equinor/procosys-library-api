@@ -20,10 +20,7 @@ namespace Equinor.Procosys.Library.WebApi.Tests.Controllers
         private Mock<IMediator> _mediatorMock;
 
         [TestInitialize]
-        public void Setup()
-        {
-            _mediatorMock = new Mock<IMediator>();
-        }
+        public void Setup() => _mediatorMock = new Mock<IMediator>();
 
         [TestMethod]
         public async Task GetAllAreasAsync_Returns200Ok()
