@@ -137,7 +137,7 @@ namespace Equinor.Procosys.Library.WebApi
             app.UseSwagger();
             app.UseSwaggerUI(c =>
             {
-                c.SwaggerEndpoint("/swagger/v1/swagger.json", "ProCoSys Library API V1");
+                c.SwaggerEndpoint("v1/swagger.json", "ProCoSys Library API V1");
                 c.DocExpansion(DocExpansion.List);
                 c.DisplayRequestDuration();
 

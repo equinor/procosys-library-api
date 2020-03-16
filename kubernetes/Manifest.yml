@@ -58,18 +58,18 @@ metadata:
     namespace: pcs-library-dev-ns
     annotations:
         kubernetes.io/ingress.class: nginx
-        nginx.ingress.kubernetes.io/rewrite-target: /
+        nginx.ingress.kubernetes.io/rewrite-target: /$2
         cert-manager.io/cluster-issuer: letsencrypt-staging
 spec:
     tls:
     - hosts:
-      - library.pcs-dev.net
-      secretName: library.pcs-dev.net-tls
+      - pcs-dev.net
+      secretName: pcs-dev.net-tls
     rules:
-    - host: library.pcs-dev.net
+    - host: pcs-dev.net
       http:
         paths:
         - backend:
             serviceName: pcs-library-svc
             servicePort: 80
-          path: /
+          path: /library(/|$)(.*)

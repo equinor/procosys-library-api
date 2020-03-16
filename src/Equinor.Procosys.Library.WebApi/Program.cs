@@ -22,7 +22,7 @@ namespace Equinor.Procosys.Library.WebApi
             .ConfigureAppConfiguration((hostingContext, config) =>
             {
                 config.AddJsonFile(
-                    "secrets/appsettings.secrets.json", optional: false, reloadOnChange: true);
+                    "secrets/appsettings.secrets.json", optional: true, reloadOnChange: true);
             });
     }
 }
