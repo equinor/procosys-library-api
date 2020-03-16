@@ -20,9 +20,16 @@ spec:
         spec:
             nodeSelector:
                 "beta.kubernetes.io/os": linux
+            volumes:
+            - name: secrets
+              secret: 
+                secretName: env-secrets
             containers:
             - name: pcs-library-cnr
               image: procosys.azurecr.io/library/api:latest
+              volumeMounts:
+                - name: secrets
+                  mountPath: "/app/secrets"
               resources:
                 requests:
                     cpu: 100m
@@ -30,10 +37,6 @@ spec:
                 limits:
                     cpu: 250m
                     memory: 256Mi
-            volumes:
-            - name: env-secrets-volumes
-              secret: 
-                secretName: env-secrets
 ---
 apiVersion: v1
 kind: Service
