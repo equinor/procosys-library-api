@@ -22,7 +22,7 @@ spec:
                 "beta.kubernetes.io/os": linux
             containers:
             - name: pcs-library-cnr
-              image: procosys.azurecr.io/library/api:16166
+              image: procosys.azurecr.io/library/api:latest
               resources:
                 requests:
                     cpu: 100m
