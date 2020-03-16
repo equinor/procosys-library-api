@@ -24,5 +24,5 @@ namespace Equinor.Procosys.Library.WebApi
                 config.AddJsonFile(
                     "secrets/appsettings.secrets.json", optional: false, reloadOnChange: true);
             });
-    }6
+    }
 }
