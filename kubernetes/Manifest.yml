@@ -58,7 +58,7 @@ metadata:
     namespace: pcs-library-dev-ns
     annotations:
         kubernetes.io/ingress.class: nginx
-        nginx.ingress.kubernetes.io/rewrite-target: /$2
+        nginx.ingress.kubernetes.io/rewrite-target: /
         cert-manager.io/cluster-issuer: letsencrypt-staging
 spec:
     tls:
@@ -72,4 +72,4 @@ spec:
         - backend:
             serviceName: pcs-library-svc
             servicePort: 80
-          path: /(.*)
+          path: /
