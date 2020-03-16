@@ -22,7 +22,7 @@ spec:
                 "beta.kubernetes.io/os": linux
             containers:
             - name: pcs-library-cnr
-              image: procosys.azurecr.io/library/api:latest
+              image: procosys.azurecr.io/library/api:16166
               resources:
                 requests:
                     cpu: 100m
@@ -30,6 +30,10 @@ spec:
                 limits:
                     cpu: 250m
                     memory: 256Mi
+            volumes:
+            - name: env-secrets-volumes
+              secret: 
+                secretName: env-secrets
 ---
 apiVersion: v1
 kind: Service
