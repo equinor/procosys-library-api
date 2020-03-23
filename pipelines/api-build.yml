@@ -62,7 +62,8 @@ stages:
     parameters:
       deploymentName: 'deploy_library_api'
       dependsOn: ''
-      env: 'pcs-${{ variables.envName }}'
+      serviceConnection: '${{ variables.serviceConnection }}'
+      env: '${{ variables.envName }}'
       envRg: 'pcs-hosting-rg'
       envGroup: '${{ variables.envGroupName }}'
       dockerImage: 'procosys.azurecr.io/library/api:$(Build.BuildId)'
