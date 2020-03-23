@@ -57,7 +57,7 @@ stages:
     containerRegistry: '${{ variables.containerRegistryName }}' 
     aspNetCoreEnvironment: 'Development'
 
-jobs:
+  jobs:
   - template: /templates/pipelines/kubernetes/library-deploy.yml@templates
     parameters:
       deploymentName: 'deploy_library_api'
