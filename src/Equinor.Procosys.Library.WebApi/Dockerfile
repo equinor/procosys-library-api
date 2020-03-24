@@ -49,8 +49,8 @@ RUN mkdir /app && chown apprunner.apprunner /app
 # Change the user from root to non-root- From now on, all Docker commands are run as non-root user (except for COPY)
 USER apprunner
 # Set the port to 5000 since the default production port is 80 and on-root users cannot bind to this port
-ENV ASPNETCORE_URLS http://+:5000;https://+:5001
-EXPOSE 5000 5001
+ENV ASPNETCORE_URLS http://+:5000
+EXPOSE 5000
 WORKDIR /app
 # Copy the published files from the build image into this one
 # COPY defaults to copying files as root, specify the user that should be the owner
