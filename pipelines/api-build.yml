@@ -48,12 +48,23 @@ stages:
 - stage: dev
   displayName: 'Dev'
   dependsOn: 'build'
-  condition: and(succeeded(), eq(variables['Build.SourceBranch'], 'refs/heads/master'))
+  condition: and(succeeded(), ne(variables['Build.SourceBranch'], 'refs/heads/master'))
   variables:
     envName: 'dev'
     envRg: '${{ variables.envRgName }}'
     envGroupName: '$(globalPrefix)-$(fullAppName)-${{ variables.envName }}'
     serviceConnection: '${{ variables.nonProdServiceConnection }}'
-    appServicePlan: '${{ variables.nonProdappServicePlanName }}'
     containerRegistry: '${{ variables.containerRegistryName }}' 
     aspNetCoreEnvironment: 'Development'
+
+  jobs:
+  - template: /templates/pipelines/kubernetes/library-deploy.yml@templates
+    parameters:
+      deploymentName: 'deploy_library_api'
+      dependsOn: ''
+      serviceConnection: '${{ variables.serviceConnection }}'
+      env: '${{ variables.envName }}'
+      envRg: 'pcs-hosting-rg'
+      envGroup: '${{ variables.envGroupName }}'
+      dockerImage: 'procosys.azurecr.io/library/api:$(Build.BuildId)'
+      clusterName: 'aks-pcs-test'
