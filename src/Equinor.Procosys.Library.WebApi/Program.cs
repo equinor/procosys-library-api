@@ -1,5 +1,7 @@
 ﻿using Microsoft.AspNetCore.Hosting;
 using Microsoft.Extensions.Hosting;
+using Microsoft.Extensions.Configuration;
+using Equinor.Procosys.Library.WebApi.Misc;
 
 namespace Equinor.Procosys.Library.WebApi
 {
@@ -13,6 +15,15 @@ namespace Equinor.Procosys.Library.WebApi
 
         public static IHostBuilder CreateHostBuilder(string[] args) =>
             Host.CreateDefaultBuilder(args)
+                .ConfigureAppConfiguration((context, config) =>
+                {
+                    var kvSettings = new KeyVaultSettings();
+                    config.Build().GetSection("KeyVault").Bind(kvSettings);
+                    if (kvSettings.Enabled)
+                    {
+                        config.AddAzureKeyVault(kvSettings.Uri, kvSettings.ClientId, kvSettings.ClientSecret);
+                    }
+                })
                 .ConfigureWebHostDefaults(webBuilder =>
                 {
                     webBuilder.UseKestrel(options => options.AddServerHeader = false);
