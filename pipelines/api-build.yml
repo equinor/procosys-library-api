@@ -60,6 +60,7 @@ stages:
     kvClientId: '$(kvClientIdName)'
     kvClientSecret: '$(kvClientSecretName)'
     kv: '$(kvName)'
+    kvRg: '$(envRgName)'
 
   jobs:
   - template: /templates/pipelines/kubernetes/library-deploy.yml@templates
@@ -76,3 +77,4 @@ stages:
       kvUriName: '${{ variables.kvUri }}'
       kvClientSecretName: '${{ variables.kvClientSecret }}'
       kvName: '${{ variables.kv }}'
+      kvRgName: '${{ variables.kvRg }}'
