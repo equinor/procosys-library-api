@@ -14,5 +14,7 @@ namespace Equinor.Procosys.Library.WebApi.Validation
             Field = field != string.Empty ? field : null;
             Message = message;
         }
+
+        public override string ToString() => $"Field: {Field}, Message: {Message}";
     }
 }

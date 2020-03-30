@@ -4,6 +4,8 @@ using System.Linq;
 using System.Threading;
 using System.Threading.Tasks;
 using Equinor.Procosys.Library.Query.Client;
+using FluentValidation;
+using FluentValidation.Results;
 using MediatR;
 using Microsoft.Extensions.Options;
 using ServiceResult;
@@ -27,6 +29,8 @@ namespace Equinor.Procosys.Library.Query.GetAllAreas
 
         public async Task<Result<IEnumerable<AreaDto>>> Handle(GetAllAreasQuery request, CancellationToken cancellationToken)
         {
+            throw new ValidationException("Validation errors", new List<ValidationFailure> { new ValidationFailure("PropName", "AttemptedValue") });
+
             var url = $"{ _baseAddress}Library/Areas" +
                 $"?plantId={request.Plant}" +
                 $"&api-version={_apiVersion}";

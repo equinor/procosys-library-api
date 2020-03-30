@@ -6,10 +6,17 @@ namespace Equinor.Procosys.Library.WebApi.Validation
 {
     public class ValidationFailedResult : ObjectResult
     {
+        protected ValidationFailedResult(ValidationResultModel value)
+            : base(value) => StatusCode = StatusCodes.Status422UnprocessableEntity;
+
         public ValidationFailedResult(ModelStateDictionary modelState)
-            : base(new ValidationResultModel(modelState))
+            : this(new ValidationResultModel(modelState))
         {
-            StatusCode = StatusCodes.Status422UnprocessableEntity;
+        }
+
+        public ValidationFailedResult(FluentValidation.ValidationException ve)
+            : this(new ValidationResultModel(ve))
+        {
         }
     }
 }

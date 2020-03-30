@@ -4,6 +4,7 @@ using System.Linq;
 using System.Net;
 using System.Text.Json;
 using System.Threading.Tasks;
+using Equinor.Procosys.Library.WebApi.Validation;
 using Microsoft.AspNetCore.Http;
 using Microsoft.Extensions.Logging;
 
@@ -29,12 +30,13 @@ namespace Equinor.Procosys.Library.WebApi.Middleware
             }
             catch (FluentValidation.ValidationException ve)
             {
-                context.Response.StatusCode = (int)HttpStatusCode.BadRequest;
+                var response = new ValidationFailedResult(ve);
+
+                _logger.LogInformation(response.Value.ToString());
+
+                context.Response.StatusCode = (int)response.StatusCode;
                 context.Response.ContentType = "application/text";
-                var response = new ValidationErrorResponse(ve.Errors.Count(), ve.Errors.Select(x => new ValidationError(x.PropertyName, x.ErrorMessage, x.AttemptedValue)));
-                var json = JsonSerializer.Serialize(response);
-                _logger.LogInformation(json);
-                await context.Response.WriteAsync(json);
+                await context.Response.WriteAsync(JsonSerializer.Serialize(response.Value));
             }
             catch (Exception ex)
             {

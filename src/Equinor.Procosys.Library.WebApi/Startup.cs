@@ -81,7 +81,18 @@ namespace Equinor.Procosys.Library.WebApi
             })
             .AddJsonOptions(options => options.JsonSerializerOptions.Converters.Add(new JsonStringEnumConverter()));
 
-            services.AddControllers();
+            services.AddControllers()
+                .AddFluentValidation(fv =>
+                {
+                    fv.RegisterValidatorsFromAssemblies
+                    (
+                        new List<Assembly>
+                        {
+                            typeof(ICommandMarker).GetTypeInfo().Assembly,
+                        }
+                    );
+                    fv.RunDefaultMvcValidationAfterFluentValidationExecutes = true;
+                });
 
             var scopes = Configuration.GetSection("Swagger:Scopes")?.Get<Dictionary<string, string>>() ?? new Dictionary<string, string>();
             services.AddSwaggerGen(c =>
