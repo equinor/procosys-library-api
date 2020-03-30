@@ -149,7 +149,7 @@ namespace Equinor.Procosys.Library.WebApi
 
             app.UseCors(AllowAllOriginsCorsPolicy);
 
-            app.UseHttpsRedirection();
+            //app.UseHttpsRedirection();
 
             app.UseRouting();
 
