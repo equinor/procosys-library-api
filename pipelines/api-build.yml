@@ -56,6 +56,11 @@ stages:
     serviceConnection: '${{ variables.nonProdServiceConnection }}'
     containerRegistry: '${{ variables.containerRegistryName }}' 
     aspNetCoreEnvironment: 'Development'
+    kvUri: '$(kvUriName)'
+    kvClientId: '$(kvClientIdName)'
+    kvClientSecret: '$(kvClientSecretName)'
+    kv: '$(kvName)'
+    kvRg: '$(envRgName)'
 
   jobs:
   - template: /templates/pipelines/kubernetes/library-deploy.yml@templates
@@ -68,3 +73,8 @@ stages:
       envGroup: '${{ variables.envGroupName }}'
       dockerImage: 'procosys.azurecr.io/library/api:$(Build.BuildId)'
       clusterName: 'aks-pcs-test'
+      kvClientIdName: '${{ variables.kvClientId }}'
+      kvUriName: '${{ variables.kvUri }}'
+      kvClientSecretName: '${{ variables.kvClientSecret }}'
+      kvName: '${{ variables.kv }}'
+      kvRgName: '${{ variables.kvRg }}'
