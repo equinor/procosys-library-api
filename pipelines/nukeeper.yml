@@ -11,7 +11,8 @@ resources:
   - repository: self
 
 pool:
-  name: Azure Pipelines
+  vmImage: 'ubuntu-latest'
+
 steps:
 - task: nukeeper.nukeeper.nukeeper.NuKeeper@0
   displayName: NuKeeper
