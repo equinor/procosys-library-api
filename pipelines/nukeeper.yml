@@ -1,5 +1,5 @@
 schedules:
-- cron: "17 10 * * 1-5"
+- cron: "17 8 * * 1-5"
   displayName: Workday morning NuGet PR
   branches:
     include:
