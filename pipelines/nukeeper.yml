@@ -1,3 +1,4 @@
+schedules:
 - cron: "0 12 * * *"
   displayName: Workday morning NuGet PR
   branches:
