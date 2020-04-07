@@ -1,7 +1,7 @@
-schedules:
 - pr: none
 - trigger: none
-- cron: "20 8 * * 1-5"
+schedules:
+- cron: "21 8 * * 1-5"
   displayName: Workday morning NuGet PR
   branches:
     include:
