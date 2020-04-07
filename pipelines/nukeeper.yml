@@ -1,14 +1,10 @@
 schedules:
-- cron: "0 12 * * *"
+- cron: "17 10 * * 1-5"
   displayName: Workday morning NuGet PR
   branches:
     include:
     - nukeeper
   always: true
-
-resources:
-  repositories:
-  - repository: self
 
 pool:
   vmImage: 'ubuntu-latest'
