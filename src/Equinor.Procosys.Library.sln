@@ -30,7 +30,7 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Equinor.Procosys.Library.Qu
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Equinor.Procosys.Library.WebApi.Tests", "Tests\Equinor.Procosys.Library.WebApi.Tests\Equinor.Procosys.Library.WebApi.Tests.csproj", "{065C9A62-0885-4238-8893-B10BE15E5201}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Equinor.Procosys.Library.Test.Common", "Tests\Equinor.Procosys.Library.Test.Common\Equinor.Procosys.Library.Test.Common.csproj", "{6A23BBB7-684C-416B-9D83-FF70AC051F08}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Equinor.Procosys.Library.Test.Common", "Tests\Equinor.Procosys.Library.Test.Common\Equinor.Procosys.Library.Test.Common.csproj", "{6A23BBB7-684C-416B-9D83-FF70AC051F08}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
