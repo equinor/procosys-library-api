@@ -12,11 +12,11 @@ namespace Equinor.Procosys.Library.WebApi.Controllers.Register
 {
     [ApiController]
     [Route("Registers")]
-    public class RegisterController : ControllerBase
+    public class RegistersController : ControllerBase
     {
         private readonly IMediator _mediator;
 
-        public RegisterController(IMediator mediator) => _mediator = mediator;
+        public RegistersController(IMediator mediator) => _mediator = mediator;
 
         [HttpGet]
         public async Task<ActionResult<IEnumerable<RegisterDto>>> GetAllRegistersAsync(
