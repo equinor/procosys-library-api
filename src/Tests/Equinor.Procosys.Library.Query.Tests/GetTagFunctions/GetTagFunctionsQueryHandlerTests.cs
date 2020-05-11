@@ -2,22 +2,23 @@
 using System.Linq;
 using System.Threading.Tasks;
 using Equinor.Procosys.Library.Query.Client;
-using Equinor.Procosys.Library.Query.GetAllRegisters;
+using Equinor.Procosys.Library.Query.GetTagFunctions;
 using Microsoft.Extensions.Options;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
 using Moq;
 using ServiceResult;
 
-namespace Equinor.Procosys.Library.Query.Tests.GetAllRegisters
+namespace Equinor.Procosys.Library.Query.Tests.GetTagFunctions
 {
     [TestClass]
-    public class GetAllRegistersQueryHandlerTests
+    public class GetTagFunctionsQueryHandlerTests
     {
         private const string Plant = "PCS$TESTPLANT";
-        private Mock<IBearerTokenApiClient> _clientMock;
+        private const string RegisterCode = "A";
         private Mock<IOptionsMonitor<MainApiOptions>> _optionsMonitorMock;
-        private GetAllRegistersQueryHandler _dut;
-        private GetAllRegistersQuery _request;
+        private Mock<IBearerTokenApiClient> _clientMock;
+        private GetTagFunctionsQueryHandler _dut;
+        private GetTagFunctionsQuery _request;
 
         [TestInitialize]
         public void Setup()
@@ -34,19 +35,21 @@ namespace Equinor.Procosys.Library.Query.Tests.GetAllRegisters
                 .Setup(x => x.CurrentValue)
                 .Returns(options);
 
-            _request = new GetAllRegistersQuery(Plant);
-            var url = $"{options.BaseAddress}Library/Registers" +
+            _request = new GetTagFunctionsQuery(Plant, RegisterCode);
+
+            var url = $"{options.BaseAddress}Library/TagFunctions" +
                 $"?plantId={_request.Plant}" +
+                $"&registerCode={_request.RegisterCode}" +
                 $"&api-version={options.ApiVersion}";
 
-           var registers = new List<MainApiRegister>
+           var tagFunctions = new List<MainApiTagFunction>
                 {
-                    new MainApiRegister
+                    new MainApiTagFunction
                     {
                         Code = "CodeA",
                         Description = "DescriptionA"
                     },
-                    new MainApiRegister
+                    new MainApiTagFunction
                     {
                         Code = "CodeB",
                         Description = "DescriptionB"
@@ -55,9 +58,9 @@ namespace Equinor.Procosys.Library.Query.Tests.GetAllRegisters
 
             _clientMock = new Mock<IBearerTokenApiClient>();
             _clientMock
-                .Setup(x => x.QueryAndDeserialize<List<MainApiRegister>>(url))
-                .Returns(Task.FromResult(registers));
-            _dut = new GetAllRegistersQueryHandler(_clientMock.Object, _optionsMonitorMock.Object);
+                .Setup(x => x.QueryAndDeserialize<List<MainApiTagFunction>>(url))
+                .Returns(Task.FromResult(tagFunctions));
+            _dut = new GetTagFunctionsQueryHandler(_clientMock.Object, _optionsMonitorMock.Object);
         }
 
         [TestMethod]
@@ -91,10 +94,10 @@ namespace Equinor.Procosys.Library.Query.Tests.GetAllRegisters
         public async Task Handle_ReturnsEmptyList_IfNoElementsAreFound()
         {
             _clientMock
-                .Setup(x => x.QueryAndDeserialize<List<MainApiRegister>>(It.IsAny<string>()))
-                .Returns(Task.FromResult<List<MainApiRegister>>(null));
+                .Setup(x => x.QueryAndDeserialize<List<MainApiTagFunction>>(It.IsAny<string>()))
+                .Returns(Task.FromResult<List<MainApiTagFunction>>(null));
 
-            var dut = new GetAllRegistersQueryHandler(_clientMock.Object, _optionsMonitorMock.Object);
+            var dut = new GetTagFunctionsQueryHandler(_clientMock.Object, _optionsMonitorMock.Object);
 
             var result = await dut.Handle(_request, default);
 
