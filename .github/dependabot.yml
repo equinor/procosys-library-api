@@ -4,3 +4,5 @@ updates:
     directory: "/src"
     schedule:
       interval: "weekly"
+    reviewers:
+      - "equinor/procosys"
