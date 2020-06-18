@@ -65,7 +65,7 @@ stages:
   jobs:
   - template: /templates/pipelines/kubernetes/library-deploy.yml@templates
     parameters:
-      deploymentName: 'deploy_library_api'
+      deploymentName: 'deploy_dev_to_k8s'
       dependsOn: ''
       serviceConnection: '${{ variables.serviceConnection }}'
       env: '${{ variables.envName }}'
@@ -100,7 +100,7 @@ stages:
   jobs:
   - template: /templates/pipelines/kubernetes/library-deploy.yml@templates
     parameters:
-      deploymentName: 'deploy_library_api'
+      deploymentName: 'deploy_test_to_k8s'
       dependsOn: ''
       serviceConnection: '${{ variables.serviceConnection }}'
       env: '${{ variables.envName }}'
@@ -117,7 +117,7 @@ stages:
 # Prod deploy stage
 - stage: prod
   displayName: 'Prod'
-  dependsOn: 'test'
+  dependsOn: 'build'
   condition: and(succeeded(), eq(variables['Build.SourceBranch'], 'refs/heads/master'))
   variables:
     envName: 'prod'
@@ -135,7 +135,7 @@ stages:
   jobs:
   - template: /templates/pipelines/kubernetes/library-deploy.yml@templates
     parameters:
-      deploymentName: 'deploy_library_api'
+      deploymentName: 'deploy_prod_to_k8s'
       dependsOn: ''
       serviceConnection: '${{ variables.serviceConnection }}'
       env: '${{ variables.envName }}'
