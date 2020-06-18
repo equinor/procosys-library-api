@@ -78,3 +78,73 @@ stages:
       kvClientSecretName: '${{ variables.kvClientSecret }}'
       kvName: '${{ variables.kv }}'
       kvRgName: '${{ variables.kvRg }}'
+
+# Test deploy stage
+- stage: test
+  displayName: 'Test'
+  dependsOn: 'build'
+  condition: and(succeeded(), eq(variables['Build.SourceBranch'], 'refs/heads/master'))
+  variables:
+    envName: 'test'
+    envRg: '${{ variables.envRgName }}'
+    envGroupName: '$(globalPrefix)-$(fullAppName)-${{ variables.envName }}'
+    serviceConnection: '${{ variables.nonProdServiceConnection }}'
+    containerRegistry: '${{ variables.containerRegistryName }}' 
+    aspNetCoreEnvironment: 'Test'
+    kvUri: '$(kvUriName)'
+    kvClientId: '$(kvClientIdName)'
+    kvClientSecret: '$(kvClientSecretName)'
+    kv: '$(kvName)'
+    kvRg: '$(envRgName)'
+
+  jobs:
+  - template: /templates/pipelines/kubernetes/library-deploy.yml@templates
+    parameters:
+      deploymentName: 'deploy_library_api'
+      dependsOn: ''
+      serviceConnection: '${{ variables.serviceConnection }}'
+      env: '${{ variables.envName }}'
+      envRg: 'pcs-hosting-rg'
+      envGroup: '${{ variables.envGroupName }}'
+      dockerImage: 'procosys.azurecr.io/library/api:$(Build.BuildId)'
+      clusterName: 'pcs-aks-test'
+      kvClientIdName: '${{ variables.kvClientId }}'
+      kvUriName: '${{ variables.kvUri }}'
+      kvClientSecretName: '${{ variables.kvClientSecret }}'
+      kvName: '${{ variables.kv }}'
+      kvRgName: '${{ variables.kvRg }}'
+
+# Prod deploy stage
+- stage: prod
+  displayName: 'Prod'
+  dependsOn: 'test'
+  condition: and(succeeded(), eq(variables['Build.SourceBranch'], 'refs/heads/master'))
+  variables:
+    envName: 'prod'
+    envRg: '${{ variables.envRgName }}'
+    envGroupName: '$(globalPrefix)-$(fullAppName)-${{ variables.envName }}'
+    serviceConnection: '${{ variables.prodServiceConnection }}'
+    containerRegistry: '${{ variables.containerRegistryName }}' 
+    aspNetCoreEnvironment: 'Prod'
+    kvUri: '$(kvUriName)'
+    kvClientId: '$(kvClientIdName)'
+    kvClientSecret: '$(kvClientSecretName)'
+    kv: '$(kvName)'
+    kvRg: '$(envRgName)'
+
+  jobs:
+  - template: /templates/pipelines/kubernetes/library-deploy.yml@templates
+    parameters:
+      deploymentName: 'deploy_library_api'
+      dependsOn: ''
+      serviceConnection: '${{ variables.serviceConnection }}'
+      env: '${{ variables.envName }}'
+      envRg: 'pcs-hosting-rg'
+      envGroup: '${{ variables.envGroupName }}'
+      dockerImage: 'procosys.azurecr.io/library/api:$(Build.BuildId)'
+      clusterName: 'pcs-aks-prod'
+      kvClientIdName: '${{ variables.kvClientId }}'
+      kvUriName: '${{ variables.kvUri }}'
+      kvClientSecretName: '${{ variables.kvClientSecret }}'
+      kvName: '${{ variables.kv }}'
+      kvRgName: '${{ variables.kvRg }}'
