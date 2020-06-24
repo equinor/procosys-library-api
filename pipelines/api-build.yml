@@ -48,7 +48,7 @@ stages:
 - stage: dev
   displayName: 'Dev'
   dependsOn: 'build'
-  condition: and(succeeded(), eq(variables['Build.SourceBranch'], 'refs/heads/master'))
+  condition: and(succeeded(), ne(variables['Build.SourceBranch'], 'refs/heads/master'))
   variables:
     envName: 'dev'
     envRg: '${{ variables.envRgName }}'
@@ -59,6 +59,7 @@ stages:
     kvUri: '$(kvUriName)'
     kvClientId: '$(kvClientIdName)'
     kvClientSecret: '$(kvClientSecretName)'
+    kvIkeySecretName: '$(kvIkeySecretName)'
     kv: '$(kvName)'
     kvRg: '$(envRgName)'
 
@@ -76,6 +77,7 @@ stages:
       kvClientIdName: '${{ variables.kvClientId }}'
       kvUriName: '${{ variables.kvUri }}'
       kvClientSecretName: '${{ variables.kvClientSecret }}'
+      kvIkeySecretName: '${{ variables.kvIkeySecretName }}'
       kvName: '${{ variables.kv }}'
       kvRgName: '${{ variables.kvRg }}'
 
@@ -94,6 +96,7 @@ stages:
     kvUri: '$(kvUriName)'
     kvClientId: '$(kvClientIdName)'
     kvClientSecret: '$(kvClientSecretName)'
+    kvIkeySecretName: '$(kvIkeySecretName)'
     kv: '$(kvName)'
     kvRg: '$(envRgName)'
 
@@ -111,6 +114,7 @@ stages:
       kvClientIdName: '${{ variables.kvClientId }}'
       kvUriName: '${{ variables.kvUri }}'
       kvClientSecretName: '${{ variables.kvClientSecret }}'
+      kvIkeySecretName: '${{ variables.kvIkeySecretName }}'
       kvName: '${{ variables.kv }}'
       kvRgName: '${{ variables.kvRg }}'
 
@@ -129,6 +133,7 @@ stages:
     kvUri: '$(kvUriName)'
     kvClientId: '$(kvClientIdName)'
     kvClientSecret: '$(kvClientSecretName)'
+    kvIkeySecretName: '$(kvIkeySecretName)'
     kv: '$(kvName)'
     kvRg: '$(envRgName)'
 
@@ -146,5 +151,6 @@ stages:
       kvClientIdName: '${{ variables.kvClientId }}'
       kvUriName: '${{ variables.kvUri }}'
       kvClientSecretName: '${{ variables.kvClientSecret }}'
+      kvIkeySecretName: '${{ variables.kvIkeySecretName }}'
       kvName: '${{ variables.kv }}'
       kvRgName: '${{ variables.kvRg }}'
