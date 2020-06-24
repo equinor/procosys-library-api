@@ -59,7 +59,6 @@ stages:
     kvUri: '$(kvUriName)'
     kvClientId: '$(kvClientIdName)'
     kvClientSecret: '$(kvClientSecretName)'
-    kvIkeySecretName: '$(kvIkeySecretName)'
     kv: '$(kvName)'
     kvRg: '$(envRgName)'
 
@@ -96,7 +95,6 @@ stages:
     kvUri: '$(kvUriName)'
     kvClientId: '$(kvClientIdName)'
     kvClientSecret: '$(kvClientSecretName)'
-    kvIkeySecretName: '$(kvIkeySecretName)'
     kv: '$(kvName)'
     kvRg: '$(envRgName)'
 
@@ -133,7 +131,6 @@ stages:
     kvUri: '$(kvUriName)'
     kvClientId: '$(kvClientIdName)'
     kvClientSecret: '$(kvClientSecretName)'
-    kvIkeySecretName: '$(kvIkeySecretName)'
     kv: '$(kvName)'
     kvRg: '$(envRgName)'
 
