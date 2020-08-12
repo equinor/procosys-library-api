@@ -22,7 +22,6 @@ namespace Equinor.Procosys.Library.WebApi.Controllers.Area
         public async Task<ActionResult<IEnumerable<AreaDto>>> GetAllAreasAsync(
             [FromHeader( Name = PlantProvider.PlantHeader)]
             [Required]
-            [StringLength(Constants.Plant.MaxLength, MinimumLength = Constants.Plant.MinLength)]
             string plant)
         {
             var result = await _mediator.Send(new GetAllAreasQuery(plant));
