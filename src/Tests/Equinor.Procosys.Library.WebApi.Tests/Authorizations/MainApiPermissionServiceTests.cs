@@ -6,7 +6,7 @@ using Microsoft.Extensions.Options;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
 using Moq;
 
-namespace Equinor.Procosys.Library.WebApi.Tests.Permission
+namespace Equinor.Procosys.Library.WebApi.Tests.Authorizations
 {
     [TestClass]
     public class MainApiPermissionServiceTests
