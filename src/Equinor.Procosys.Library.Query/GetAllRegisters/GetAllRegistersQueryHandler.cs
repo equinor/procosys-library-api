@@ -31,7 +31,7 @@ namespace Equinor.Procosys.Library.Query.GetAllRegisters
                 $"?plantId={request.Plant}" +
                 $"&api-version={_apiVersion}";
 
-            var mainApiRegisters = await _mainApiClient.QueryAndDeserialize<List<MainApiRegister>>(url) ?? new List<MainApiRegister>();
+            var mainApiRegisters = await _mainApiClient.QueryAndDeserializeAsync<List<MainApiRegister>>(url) ?? new List<MainApiRegister>();
             var registerDtos = mainApiRegisters.Select(a => new RegisterDto(a.Code, a.Description));
             return new SuccessResult<IEnumerable<RegisterDto>>(registerDtos);
         }

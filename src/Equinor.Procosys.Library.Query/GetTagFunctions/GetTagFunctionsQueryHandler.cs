@@ -32,7 +32,7 @@ namespace Equinor.Procosys.Library.Query.GetTagFunctions
                 $"&registerCode={request.RegisterCode}" +
                 $"&api-version={_apiVersion}";
 
-            var mainApiTagFunctions = await _mainApiClient.QueryAndDeserialize<List<MainApiTagFunction>>(url) ?? new List<MainApiTagFunction>();
+            var mainApiTagFunctions = await _mainApiClient.QueryAndDeserializeAsync<List<MainApiTagFunction>>(url) ?? new List<MainApiTagFunction>();
             var tagFunctionDtos = mainApiTagFunctions.Select(a => new TagFunctionDto(a.Code, a.Description));
             return new SuccessResult<IEnumerable<TagFunctionDto>>(tagFunctionDtos);
         }

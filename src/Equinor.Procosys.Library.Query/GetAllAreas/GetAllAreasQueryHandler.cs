@@ -31,7 +31,7 @@ namespace Equinor.Procosys.Library.Query.GetAllAreas
                 $"?plantId={request.Plant}" +
                 $"&api-version={_apiVersion}";
 
-            var mainApiAreas = await _mainApiClient.QueryAndDeserialize<List<MainApiArea>>(url) ?? new List<MainApiArea>();
+            var mainApiAreas = await _mainApiClient.QueryAndDeserializeAsync<List<MainApiArea>>(url) ?? new List<MainApiArea>();
             var areaDtos = mainApiAreas.Select(a => new AreaDto(a.Code, a.Description));
             return new SuccessResult<IEnumerable<AreaDto>>(areaDtos);
         }

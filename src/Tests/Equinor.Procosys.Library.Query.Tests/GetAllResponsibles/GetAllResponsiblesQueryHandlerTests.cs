@@ -55,7 +55,7 @@ namespace Equinor.Procosys.Library.Query.Tests.GetAllResponsibles
 
             _clientMock = new Mock<IBearerTokenApiClient>();
             _clientMock
-                .Setup(x => x.QueryAndDeserialize<List<MainApiResponsible>>(url))
+                .Setup(x => x.QueryAndDeserializeAsync<List<MainApiResponsible>>(url))
                 .Returns(Task.FromResult(responsibles));
             _dut = new GetAllResponsiblesQueryHandler(_clientMock.Object, _optionsMonitorMock.Object);
         }
@@ -91,7 +91,7 @@ namespace Equinor.Procosys.Library.Query.Tests.GetAllResponsibles
         public async Task Handle_ReturnsEmptyList_IfNoElementsAreFound()
         {
             _clientMock
-                .Setup(x => x.QueryAndDeserialize<List<MainApiResponsible>>(It.IsAny<string>()))
+                .Setup(x => x.QueryAndDeserializeAsync<List<MainApiResponsible>>(It.IsAny<string>()))
                 .Returns(Task.FromResult<List<MainApiResponsible>>(null));
 
             var dut = new GetAllResponsiblesQueryHandler(_clientMock.Object, _optionsMonitorMock.Object);

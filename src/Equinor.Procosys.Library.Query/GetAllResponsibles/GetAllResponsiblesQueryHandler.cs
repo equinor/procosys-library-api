@@ -31,7 +31,7 @@ namespace Equinor.Procosys.Library.Query.GetAllResponsibles
                       $"?plantId={request.Plant}" +
                       $"&api-version={_apiVersion}";
 
-            var mainApiResponsibles = await _mainApiClient.QueryAndDeserialize<List<MainApiResponsible>>(url) ?? new List<MainApiResponsible>();
+            var mainApiResponsibles = await _mainApiClient.QueryAndDeserializeAsync<List<MainApiResponsible>>(url) ?? new List<MainApiResponsible>();
             var responsibleDtos = mainApiResponsibles.Select(a => new ResponsibleDto(a.Code, a.Description));
             return new SuccessResult<IEnumerable<ResponsibleDto>>(responsibleDtos);
         }

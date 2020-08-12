@@ -76,7 +76,7 @@ namespace Equinor.Procosys.Library.Query.Tests.GetAllDisciplines
         public async Task Handle_ReturnsOkResult()
         {
             _clientMock
-                .Setup(x => x.QueryAndDeserialize<List<MainApiDiscipline>>(_urlWithClassifications))
+                .Setup(x => x.QueryAndDeserializeAsync<List<MainApiDiscipline>>(_urlWithClassifications))
                 .Returns(Task.FromResult(_disciplines));
 
             var dut = new GetAllDisciplinesQueryHandler(_clientMock.Object, _optionsMonitorMock.Object);
@@ -90,7 +90,7 @@ namespace Equinor.Procosys.Library.Query.Tests.GetAllDisciplines
         public async Task Handle_ReturnsCorrectNumberOfElements()
         {
             _clientMock
-                .Setup(x => x.QueryAndDeserialize<List<MainApiDiscipline>>(_urlWithClassifications))
+                .Setup(x => x.QueryAndDeserializeAsync<List<MainApiDiscipline>>(_urlWithClassifications))
                 .Returns(Task.FromResult(_disciplines));
 
             var dut = new GetAllDisciplinesQueryHandler(_clientMock.Object, _optionsMonitorMock.Object);
@@ -104,7 +104,7 @@ namespace Equinor.Procosys.Library.Query.Tests.GetAllDisciplines
         public async Task Handle_ReturnsAllElements_WhenNoClassificationsAreGiven()
         {
             _clientMock
-                .Setup(x => x.QueryAndDeserialize<List<MainApiDiscipline>>(_urlWithoutClassifications))
+                .Setup(x => x.QueryAndDeserializeAsync<List<MainApiDiscipline>>(_urlWithoutClassifications))
                 .Returns(Task.FromResult(_disciplines));
 
             var request = new GetAllDisciplinesQuery(Plant, null);
@@ -120,7 +120,7 @@ namespace Equinor.Procosys.Library.Query.Tests.GetAllDisciplines
         public async Task Handle_ProjectsElementsCorrectly()
         {
             _clientMock
-                .Setup(x => x.QueryAndDeserialize<List<MainApiDiscipline>>(_urlWithClassifications))
+                .Setup(x => x.QueryAndDeserializeAsync<List<MainApiDiscipline>>(_urlWithClassifications))
                 .Returns(Task.FromResult(_disciplines));
 
             var dut = new GetAllDisciplinesQueryHandler(_clientMock.Object, _optionsMonitorMock.Object);
@@ -137,7 +137,7 @@ namespace Equinor.Procosys.Library.Query.Tests.GetAllDisciplines
         public async Task Handle_ReturnsEmptyList_IfNoElementsAreFound()
         {
             _clientMock
-                .Setup(x => x.QueryAndDeserialize<List<MainApiDiscipline>>(It.IsAny<string>()))
+                .Setup(x => x.QueryAndDeserializeAsync<List<MainApiDiscipline>>(It.IsAny<string>()))
                 .Returns(Task.FromResult<List<MainApiDiscipline>>(null));
 
             var dut = new GetAllDisciplinesQueryHandler(_clientMock.Object, _optionsMonitorMock.Object);

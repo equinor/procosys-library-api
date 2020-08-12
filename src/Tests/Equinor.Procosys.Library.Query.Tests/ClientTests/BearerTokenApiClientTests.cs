@@ -27,7 +27,7 @@ namespace Equinor.Procosys.Library.Query.Tests.ClientTests
             var httpClientFactory = HttpHelper.GetHttpClientFactory(HttpStatusCode.OK, "{\"Id\": 123}");
             var dut = new BearerTokenApiClient(httpClientFactory, _bearerTokenProvider.Object, _logger.Object);
 
-            var response = await dut.QueryAndDeserialize<DummyClass>("");
+            var response = await dut.QueryAndDeserializeAsync<DummyClass>("");
 
             Assert.IsNotNull(response);
             Assert.AreEqual(123, response.Id);
@@ -39,7 +39,7 @@ namespace Equinor.Procosys.Library.Query.Tests.ClientTests
             var httpClientFactory = HttpHelper.GetHttpClientFactory(HttpStatusCode.BadGateway, "");
             var dut = new BearerTokenApiClient(httpClientFactory, _bearerTokenProvider.Object, _logger.Object);
 
-            var response = await dut.QueryAndDeserialize<DummyClass>("");
+            var response = await dut.QueryAndDeserializeAsync<DummyClass>("");
 
             Assert.AreEqual(default, response);
         }
@@ -50,7 +50,7 @@ namespace Equinor.Procosys.Library.Query.Tests.ClientTests
             var httpClientFactory = HttpHelper.GetHttpClientFactory(HttpStatusCode.OK, "");
             var dut = new BearerTokenApiClient(httpClientFactory, _bearerTokenProvider.Object, _logger.Object);
 
-            await Assert.ThrowsExceptionAsync<JsonException>(async () => await dut.QueryAndDeserialize<DummyClass>(""));
+            await Assert.ThrowsExceptionAsync<JsonException>(async () => await dut.QueryAndDeserializeAsync<DummyClass>(""));
         }
 
         private class DummyClass

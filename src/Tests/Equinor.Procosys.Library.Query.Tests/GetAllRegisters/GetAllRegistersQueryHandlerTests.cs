@@ -55,7 +55,7 @@ namespace Equinor.Procosys.Library.Query.Tests.GetAllRegisters
 
             _clientMock = new Mock<IBearerTokenApiClient>();
             _clientMock
-                .Setup(x => x.QueryAndDeserialize<List<MainApiRegister>>(url))
+                .Setup(x => x.QueryAndDeserializeAsync<List<MainApiRegister>>(url))
                 .Returns(Task.FromResult(registers));
             _dut = new GetAllRegistersQueryHandler(_clientMock.Object, _optionsMonitorMock.Object);
         }
@@ -91,7 +91,7 @@ namespace Equinor.Procosys.Library.Query.Tests.GetAllRegisters
         public async Task Handle_ReturnsEmptyList_IfNoElementsAreFound()
         {
             _clientMock
-                .Setup(x => x.QueryAndDeserialize<List<MainApiRegister>>(It.IsAny<string>()))
+                .Setup(x => x.QueryAndDeserializeAsync<List<MainApiRegister>>(It.IsAny<string>()))
                 .Returns(Task.FromResult<List<MainApiRegister>>(null));
 
             var dut = new GetAllRegistersQueryHandler(_clientMock.Object, _optionsMonitorMock.Object);

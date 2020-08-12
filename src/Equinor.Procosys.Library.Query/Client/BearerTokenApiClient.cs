@@ -1,4 +1,5 @@
-﻿using System.Diagnostics;
+﻿using System;
+using System.Diagnostics;
 using System.Net.Http;
 using System.Net.Http.Headers;
 using System.Text.Json;
@@ -23,8 +24,18 @@ namespace Equinor.Procosys.Library.Query.Client
             _logger = logger;
     }
 
-        public async Task<T> QueryAndDeserialize<T>(string url)
+        public async Task<T> QueryAndDeserializeAsync<T>(string url)
         {
+            if (string.IsNullOrEmpty(url))
+            {
+                throw new ArgumentNullException(nameof(url));
+            }
+
+            if (url.Length > 2000)
+            {
+                throw new ArgumentException("url exceed max 2000 characters", nameof(url));
+            }
+
             var httpClient = _httpClientFactory.CreateClient();
             httpClient.DefaultRequestHeaders.Authorization = new AuthenticationHeaderValue("Bearer", await _bearerTokenProvider.GetBearerTokenAsync());
 
