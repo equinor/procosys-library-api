@@ -34,7 +34,7 @@ namespace Equinor.Procosys.Library.Query.GetAllDisciplines
                     .Select(c => $"&classifications={c.ToUpper()}")) +
                 $"&api-version={_apiVersion}";
 
-            var mainApiDisciplines = await _mainApiClient.QueryAndDeserialize<List<MainApiDiscipline>>(url) ?? new List<MainApiDiscipline>();
+            var mainApiDisciplines = await _mainApiClient.QueryAndDeserializeAsync<List<MainApiDiscipline>>(url) ?? new List<MainApiDiscipline>();
             var disciplineDtos = mainApiDisciplines.Select(discipline => new DisciplineDto(discipline.Code, discipline.Description));
             return new SuccessResult<IEnumerable<DisciplineDto>>(disciplineDtos);
         }

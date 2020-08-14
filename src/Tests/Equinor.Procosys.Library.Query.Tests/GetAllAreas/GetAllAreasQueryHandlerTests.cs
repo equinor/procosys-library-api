@@ -52,7 +52,7 @@ namespace Equinor.Procosys.Library.Query.Tests.GetAllAreas
 
             _clientMock = new Mock<IBearerTokenApiClient>();
             _clientMock
-                .Setup(x => x.QueryAndDeserialize<List<MainApiArea>>(url))
+                .Setup(x => x.QueryAndDeserializeAsync<List<MainApiArea>>(url))
                 .Returns(Task.FromResult(areas));
         }
 
@@ -96,7 +96,7 @@ namespace Equinor.Procosys.Library.Query.Tests.GetAllAreas
         public async Task Handle_ReturnsEmptyList_IfNoElementsAreFound()
         {
             _clientMock
-                .Setup(x => x.QueryAndDeserialize<List<MainApiArea>>(It.IsAny<string>()))
+                .Setup(x => x.QueryAndDeserializeAsync<List<MainApiArea>>(It.IsAny<string>()))
                 .Returns(Task.FromResult<List<MainApiArea>>(null));
 
             var dut = new GetAllAreasQueryHandler(_clientMock.Object, _optionsMonitorMock.Object);

@@ -1,10 +1,10 @@
 ﻿using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
 using System.Threading.Tasks;
-using Equinor.Procosys.Library.Domain;
 using Equinor.Procosys.Library.Query.GetTagFunctions;
 using Equinor.Procosys.Library.WebApi.Misc;
 using MediatR;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using ServiceResult.ApiExtensions;
 
@@ -18,11 +18,11 @@ namespace Equinor.Procosys.Library.WebApi.Controllers.TagFunction
 
         public TagFunctionsController(IMediator mediator) => _mediator = mediator;
 
+        [Authorize(Roles = Permissions.LIBRARY_GENERAL_READ)]
         [HttpGet]
         public async Task<ActionResult<IEnumerable<TagFunctionDto>>> GetAllTagFunctionsAsync(
             [FromHeader( Name = PlantProvider.PlantHeader)]
             [Required]
-            [StringLength(Constants.Plant.MaxLength, MinimumLength = Constants.Plant.MinLength)]
             string plant,
             [FromQuery] string registerCode)
         {

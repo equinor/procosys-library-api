@@ -58,7 +58,7 @@ namespace Equinor.Procosys.Library.Query.Tests.GetTagFunctions
 
             _clientMock = new Mock<IBearerTokenApiClient>();
             _clientMock
-                .Setup(x => x.QueryAndDeserialize<List<MainApiTagFunction>>(url))
+                .Setup(x => x.QueryAndDeserializeAsync<List<MainApiTagFunction>>(url))
                 .Returns(Task.FromResult(tagFunctions));
             _dut = new GetTagFunctionsQueryHandler(_clientMock.Object, _optionsMonitorMock.Object);
         }
@@ -94,7 +94,7 @@ namespace Equinor.Procosys.Library.Query.Tests.GetTagFunctions
         public async Task Handle_ReturnsEmptyList_IfNoElementsAreFound()
         {
             _clientMock
-                .Setup(x => x.QueryAndDeserialize<List<MainApiTagFunction>>(It.IsAny<string>()))
+                .Setup(x => x.QueryAndDeserializeAsync<List<MainApiTagFunction>>(It.IsAny<string>()))
                 .Returns(Task.FromResult<List<MainApiTagFunction>>(null));
 
             var dut = new GetTagFunctionsQueryHandler(_clientMock.Object, _optionsMonitorMock.Object);

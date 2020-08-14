@@ -1,6 +1,11 @@
-﻿using Equinor.Procosys.Library.Domain.Time;
+﻿using Equinor.Procosys.Library.Domain;
+using Equinor.Procosys.Library.Domain.Time;
+using Equinor.Procosys.Library.Infrastructure.Caching;
 using Equinor.Procosys.Library.Query.Client;
+using Equinor.Procosys.Library.WebApi.Authorizations;
+using Equinor.Procosys.Library.WebApi.Caches;
 using Equinor.Procosys.Library.WebApi.Misc;
+using Microsoft.AspNetCore.Authentication;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 
@@ -12,6 +17,7 @@ namespace Equinor.Procosys.Library.WebApi.DIModules
         {
             services.Configure<ApiOptions>(configuration.GetSection("API"));
             services.Configure<MainApiOptions>(configuration.GetSection("MainApi"));
+            services.Configure<CacheOptions>(configuration.GetSection("CacheOptions"));
 
             //services.AddDbContext<LibraryContext>(options =>
             //{
@@ -27,11 +33,20 @@ namespace Equinor.Procosys.Library.WebApi.DIModules
             // Scoped - Created once per client request (connection)
             services.AddScoped<IBearerTokenApiClient, BearerTokenApiClient>();
             services.AddScoped<IBearerTokenProvider, MainApiBearerTokenProvider>();
+            services.AddScoped<IPlantCache, PlantCache>();
+            services.AddScoped<IPermissionCache, PermissionCache>();
+            services.AddScoped<IClaimsTransformation, ClaimsTransformation>();
+            services.AddScoped<PlantProvider>();
+            services.AddScoped<IPlantProvider>(x => x.GetRequiredService<PlantProvider>());
+            services.AddScoped<IPlantApiService, MainApiPlantService>();
+            services.AddScoped<IPermissionApiService, MainApiPermissionService>();
             //services.AddScoped<IEventDispatcher, EventDispatcher>();
             //services.AddScoped<IUnitOfWork>(x => x.GetRequiredService<LibraryContext>());
             //services.AddScoped<IReadOnlyContext>(x => x.GetRequiredService<LibraryContext>());
 
+
             // Singleton - Created the first time they are requested
+            services.AddSingleton<ICacheManager, CacheManager>();
 
 
             TimeService.SetProvider(new SystemTimeProvider());

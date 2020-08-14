@@ -1,10 +1,10 @@
 ﻿using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
 using System.Threading.Tasks;
-using Equinor.Procosys.Library.Domain;
 using Equinor.Procosys.Library.Query.GetAllDisciplines;
 using Equinor.Procosys.Library.WebApi.Misc;
 using MediatR;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using ServiceResult.ApiExtensions;
 
@@ -18,11 +18,11 @@ namespace Equinor.Procosys.Library.WebApi.Controllers.Discipline
 
         public DisciplinesController(IMediator mediator) => _mediator = mediator;
 
+        [Authorize(Roles = Permissions.LIBRARY_GENERAL_READ)]
         [HttpGet]
         public async Task<ActionResult<IEnumerable<DisciplineDto>>> GetAllDisciplines(
             [FromHeader( Name = PlantProvider.PlantHeader)]
             [Required]
-            [StringLength(Constants.Plant.MaxLength, MinimumLength = Constants.Plant.MinLength)]
             string plant,
             [FromQuery]
             IEnumerable<string> classifications)
