@@ -1,7 +1,6 @@
 ﻿using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
 using System.Threading.Tasks;
-using Equinor.Procosys.Library.Domain;
 using Equinor.Procosys.Library.Query.GetAllRegisters;
 using Equinor.Procosys.Library.WebApi.Misc;
 using MediatR;
