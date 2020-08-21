@@ -10,6 +10,7 @@ namespace Equinor.Procosys.Library.WebApi.Authorizations
 {
     public class ClaimsTransformation : IClaimsTransformation
     {
+        public static string ClaimsIssuer = "ProCoSys";
         private readonly IPlantProvider _plantProvider;
         private readonly IPlantCache _plantCache;
         private readonly IPermissionCache _permissionCache;
@@ -44,23 +45,45 @@ namespace Equinor.Procosys.Library.WebApi.Authorizations
                 return principal;
             }
 
-            if (principal.Claims.All(c => c.Type != ClaimTypes.Role))
-            {
-                await AddRoleForLibraryPermissionsToPrincipalAsync(principal, plantId, userOid.Value);
-            }
+            var claimsIdentity = GetOrCreateClaimsIdentityForThisIssuer(principal);
+
+            await AddRoleForLibraryPermissionsToPrincipalAsync(claimsIdentity, plantId, userOid.Value);
 
             return principal;
         }
+        
+        private ClaimsIdentity GetOrCreateClaimsIdentityForThisIssuer(ClaimsPrincipal principal)
+        {
+            var identity = principal.Identities.SingleOrDefault(i => i.Label == ClaimsIssuer);
+            if (identity == null)
+            {
+                identity = new ClaimsIdentity {Label = ClaimsIssuer};
+                principal.AddIdentity(identity);
+            }
+            else
+            {
+                ClearOldClaims(identity);
+            }
 
-        private async Task AddRoleForLibraryPermissionsToPrincipalAsync(ClaimsPrincipal principal, string plantId, Guid userOid)
+            return identity;
+        }
+
+        private void ClearOldClaims(ClaimsIdentity identity)
+        {
+            var oldClaims = identity.Claims.Where(c => c.Issuer == ClaimsIssuer).ToList();
+            oldClaims.ForEach(identity.RemoveClaim);
+        }
+
+        private async Task AddRoleForLibraryPermissionsToPrincipalAsync(ClaimsIdentity claimsIdentity, string plantId, Guid userOid)
         {
             var permissions = await _permissionCache.GetPermissionsForUserAsync(plantId, userOid);
-            var claimsIdentity = new ClaimsIdentity();
 
             // add role claim just for "LIBRARY_GENERAL" permissions since we assume these are all we need in Library context
             permissions?.Where(p => p.StartsWith(Permissions.LIBRARY_GENERAL)).ToList().ForEach(
-                permission => claimsIdentity.AddClaim(new Claim(ClaimTypes.Role, permission)));
-            principal.AddIdentity(claimsIdentity);
+                permission => claimsIdentity.AddClaim(CreateClaim(ClaimTypes.Role, permission)));
         }
+
+        private static Claim CreateClaim(string claimType, string claimValue)
+            => new Claim(claimType, claimValue, null, ClaimsIssuer);
     }
 }
