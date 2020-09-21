@@ -1,5 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
+﻿using System.Collections.Generic;
 using MediatR;
 using ServiceResult;
 
@@ -9,7 +8,7 @@ namespace Equinor.Procosys.Library.Query.GetFunctionalRoles
     {
         public GetFunctionalRolesQuery(string plant, string classification)
         {
-            Plant = plant ?? throw new ArgumentNullException(nameof(plant));
+            Plant = plant;
             Classification = classification;
         }
 
