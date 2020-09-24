@@ -37,10 +37,24 @@ namespace Equinor.Procosys.Library.Query.GetFunctionalRoles
                 await _mainApiClient.QueryAndDeserializeAsync<List<MainApiFunctionalRole>>(url) ??
                 new List<MainApiFunctionalRole>();
 
-            var functionalRoleDtos =
-                mainApiFunctionalRoles.Select(fr => new FunctionalRoleDto(fr.Code, fr.Description, fr.Persons));
+            var functionalRoleDtos = ConvertToFunctionalRoleDtos(mainApiFunctionalRoles);
 
             return new SuccessResult<IEnumerable<FunctionalRoleDto>>(functionalRoleDtos);
+        }
+
+        private IEnumerable<FunctionalRoleDto> ConvertToFunctionalRoleDtos(IEnumerable<MainApiFunctionalRole> mainApiFunctionalRoles)
+        {
+            var functionalRoleDtos =
+                mainApiFunctionalRoles.Select(fr =>
+                    new FunctionalRoleDto(
+                        fr.Code,
+                        fr.Description,
+                        fr.Email,
+                        fr.InformationEmail,
+                        fr.UsePersonalEmail,
+                        fr.Persons));
+
+            return functionalRoleDtos;
         }
     }
 }

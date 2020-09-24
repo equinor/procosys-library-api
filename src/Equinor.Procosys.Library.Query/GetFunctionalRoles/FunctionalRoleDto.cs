@@ -7,15 +7,24 @@ namespace Equinor.Procosys.Library.Query.GetFunctionalRoles
         public FunctionalRoleDto(
             string code,
             string description,
-            IEnumerable<PersonsInFunctionalRole> persons)
+            string email,
+            string informationEmail,
+            bool? usePersonalEmail,
+            IEnumerable<PersonInFunctionalRole> persons)
         {
             Code = code;
             Description = description;
+            Email = email;
+            InformationEmail = informationEmail;
+            UsePersonalEmail = usePersonalEmail;
             Persons = persons;
         }
 
         public string Code { get; }
         public string Description { get; }
-        public IEnumerable<PersonsInFunctionalRole> Persons { get; }
+        public string Email { get; }
+        public string InformationEmail { get; }
+        public bool? UsePersonalEmail { get; }
+        public IEnumerable<PersonInFunctionalRole> Persons { get; }
     }
 }

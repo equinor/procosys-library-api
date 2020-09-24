@@ -16,7 +16,7 @@ namespace Equinor.Procosys.Library.Query.Tests.GetFunctionalRoles
         private const string Plant = "PCS$TESTPLANT";
         private const string Classification = "NOTIFICATION";
 
-        private List<PersonsInFunctionalRole> _persons;
+        private List<PersonInFunctionalRole> _persons;
         private PersonInFunctionalRole _personInFunctionalRole;
         private Mock<IOptionsMonitor<MainApiOptions>> _optionsMonitorMock;
         private Mock<IBearerTokenApiClient> _clientMock;
@@ -34,12 +34,12 @@ namespace Equinor.Procosys.Library.Query.Tests.GetFunctionalRoles
                 LastName = "LastName"
             };
 
-            _persons = new List<PersonsInFunctionalRole>
+            _persons = new List<PersonInFunctionalRole>
             {
-                new PersonsInFunctionalRole {Person = _personInFunctionalRole}
+                _personInFunctionalRole
             };
 
-            var options = new MainApiOptions {ApiVersion = "1", Audience = "Aud", BaseAddress = "http://example.com/"};
+            var options = new MainApiOptions { ApiVersion = "1", Audience = "Aud", BaseAddress = "http://example.com/" };
 
             _optionsMonitorMock = new Mock<IOptionsMonitor<MainApiOptions>>();
             _optionsMonitorMock
@@ -55,10 +55,24 @@ namespace Equinor.Procosys.Library.Query.Tests.GetFunctionalRoles
 
             var functionalRoles = new List<MainApiFunctionalRole>
             {
-                new MainApiFunctionalRole {Code = "CodeA", Description = "DescriptionA", Persons = _persons},
+                new MainApiFunctionalRole 
+                {
+                        Code = "CodeA",
+                        Description = "DescriptionA",
+                        Email = "Test1@email.com",
+                        InformationEmail = "TestInfo1@email.com",
+                        UsePersonalEmail = true,
+                        Persons = _persons
+
+                },
                 new MainApiFunctionalRole
                 {
-                    Code = "CodeB", Description = "DescriptionB", Persons = new List<PersonsInFunctionalRole>()
+                    Code = "CodeB",
+                    Description = "DescriptionB",
+                    Email = "Test2@email.com",
+                    InformationEmail = "TestInfo2@email.com",
+                    UsePersonalEmail = false,
+                    Persons = new List<PersonInFunctionalRole>()
                 }
             };
 
@@ -92,8 +106,16 @@ namespace Equinor.Procosys.Library.Query.Tests.GetFunctionalRoles
 
             Assert.AreEqual("CodeA", result.Data.ElementAt(0).Code);
             Assert.AreEqual("DescriptionA", result.Data.ElementAt(0).Description);
+            Assert.AreEqual("Test1@email.com", result.Data.ElementAt(0).Email);
+            Assert.AreEqual("TestInfo1@email.com", result.Data.ElementAt(0).InformationEmail);
+            var fr1UsePersonalEmail = result.Data.ElementAt(0).UsePersonalEmail;
+            Assert.IsTrue(fr1UsePersonalEmail != null && fr1UsePersonalEmail.Value);
             Assert.AreEqual("CodeB", result.Data.ElementAt(1).Code);
             Assert.AreEqual("DescriptionB", result.Data.ElementAt(1).Description);
+            Assert.AreEqual("Test2@email.com", result.Data.ElementAt(1).Email);
+            Assert.AreEqual("TestInfo2@email.com", result.Data.ElementAt(1).InformationEmail);
+            var fr2UsePersonalEmail = result.Data.ElementAt(1).UsePersonalEmail;
+            Assert.IsFalse(fr2UsePersonalEmail != null && fr2UsePersonalEmail.Value);
             Assert.AreEqual(_persons, result.Data.ElementAt(0).Persons);
             Assert.IsNotNull(result.Data.ElementAt(1).Persons);
         }
