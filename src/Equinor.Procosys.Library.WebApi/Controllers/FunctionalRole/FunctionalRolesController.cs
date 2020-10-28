@@ -19,13 +19,24 @@ namespace Equinor.Procosys.Library.WebApi.Controllers.FunctionalRole
         public FunctionalRolesController(IMediator mediator) => _mediator = mediator;
 
         [Authorize(Roles = Permissions.LIBRARY_GENERAL_READ)]
-        [HttpGet]
+        [HttpGet("/FunctionalRoles")]
         public async Task<ActionResult<IEnumerable<FunctionalRoleDto>>> GetAllFunctionalRolesAsync(
             [FromHeader(Name = PlantProvider.PlantHeader)] [Required]
             string plant,
             [FromQuery] string classification)
         {
             var result = await _mediator.Send(new GetFunctionalRolesQuery(plant, classification));
+            return this.FromResult(result);
+        }
+
+        [Authorize(Roles = Permissions.LIBRARY_GENERAL_READ)]
+        [HttpGet("/FunctionalRolesByCodes")]
+        public async Task<ActionResult<IEnumerable<FunctionalRoleDto>>> GetFunctionalRolesByCodesAsync(
+            [FromHeader(Name = PlantProvider.PlantHeader)] [Required]
+            string plant,
+            [FromQuery] List<string> functionalRoleCodes)
+        {
+            var result = await _mediator.Send(new GetFunctionalRolesByCodesQuery(plant, functionalRoleCodes));
             return this.FromResult(result);
         }
     }
