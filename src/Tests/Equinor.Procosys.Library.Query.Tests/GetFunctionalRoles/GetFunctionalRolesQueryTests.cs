@@ -1,6 +1,5 @@
 ﻿using System;
 using Equinor.Procosys.Library.Query.GetFunctionalRoles;
-using Equinor.Procosys.Library.Query.GetTagFunctions;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
 
 namespace Equinor.Procosys.Library.Query.Tests.GetFunctionalRoles
@@ -19,6 +18,6 @@ namespace Equinor.Procosys.Library.Query.Tests.GetFunctionalRoles
 
         [TestMethod]
         public void Constructor_ThrowsException_WhenNoPlantIsGiven() =>
-            Assert.ThrowsException<ArgumentNullException>(() => new GetTagFunctionsQuery(null, "NOTIFICATION"));
+            Assert.ThrowsException<ArgumentNullException>(() => new GetFunctionalRolesQuery(null, "NOTIFICATION"));
     }
 }

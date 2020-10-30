@@ -5,15 +5,15 @@ using ServiceResult;
 
 namespace Equinor.Procosys.Library.Query.GetFunctionalRoles
 {
-    public class GetFunctionalRolesQuery : IRequest<Result<IEnumerable<FunctionalRoleDto>>>
+    public class GetFunctionalRolesByCodesQuery : IRequest<Result<IEnumerable<FunctionalRoleDto>>>
     {
-        public GetFunctionalRolesQuery(string plant, string classification)
+        public GetFunctionalRolesByCodesQuery(string plant, List<string> functionalRoleCodes)
         {
             Plant = plant ?? throw new ArgumentNullException(nameof(plant));
-            Classification = classification;
+            Codes = functionalRoleCodes;
         }
 
         public string Plant { get; }
-        public string Classification { get; }
+        public List<string> Codes { get; }
     }
 }
