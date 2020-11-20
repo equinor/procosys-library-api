@@ -11,7 +11,7 @@ namespace Equinor.Procosys.Library.Query.Tests.GetFunctionalRoles
         [TestMethod]
         public void Constructor_SetsProperties()
         {
-            var dut = new GetFunctionalRolesByCodesQuery("PCS$TESTPLANT", new List<string>{ "NOTIFICATION-COMPANY-AUTHORIZED" });
+            var dut = new GetFunctionalRolesByCodesQuery("PCS$TESTPLANT", new List<string>{ "NOTIFICATION-COMPANY-AUTHORIZED" }, "NOTIFICATION");
 
             Assert.AreEqual("PCS$TESTPLANT", dut.Plant);
             Assert.AreEqual(1, dut.Codes.Count);
@@ -20,6 +20,6 @@ namespace Equinor.Procosys.Library.Query.Tests.GetFunctionalRoles
 
         [TestMethod]
         public void Constructor_ThrowsException_WhenNoPlantIsGiven() =>
-            Assert.ThrowsException<ArgumentNullException>(() => new GetFunctionalRolesByCodesQuery(null, new List<string> { "NOTIFICATION-COMPANY-AUTHORIZED" }));
+            Assert.ThrowsException<ArgumentNullException>(() => new GetFunctionalRolesByCodesQuery(null, new List<string> { "NOTIFICATION-COMPANY-AUTHORIZED" }, "NOTIFICATION"));
     }
 }

@@ -33,6 +33,7 @@ namespace Equinor.Procosys.Library.Query.GetFunctionalRoles
             var url = $"{_baseAddress}Library/FunctionalRolesByCodes" +
                       $"?plantId={request.Plant}" +
                       functionalRoleCodes +
+                      $"&classification={request.Classification}" +
                       $"&api-version={_apiVersion}";
 
             var mainApiFunctionalRoles =

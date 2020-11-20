@@ -34,9 +34,10 @@ namespace Equinor.Procosys.Library.WebApi.Controllers.FunctionalRole
         public async Task<ActionResult<IEnumerable<FunctionalRoleDto>>> GetFunctionalRolesByCodesAsync(
             [FromHeader(Name = PlantProvider.PlantHeader)] [Required]
             string plant,
-            [FromQuery] List<string> functionalRoleCodes)
+            [FromQuery] List<string> functionalRoleCodes,
+            [FromQuery] string classification)
         {
-            var result = await _mediator.Send(new GetFunctionalRolesByCodesQuery(plant, functionalRoleCodes));
+            var result = await _mediator.Send(new GetFunctionalRolesByCodesQuery(plant, functionalRoleCodes, classification));
             return this.FromResult(result);
         }
     }
