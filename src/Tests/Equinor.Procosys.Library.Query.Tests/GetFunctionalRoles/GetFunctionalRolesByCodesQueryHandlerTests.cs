@@ -15,6 +15,7 @@ namespace Equinor.Procosys.Library.Query.Tests.GetFunctionalRoles
     {
         private const string Plant = "PCS$TESTPLANT";
         private readonly List<string> Codes = new List<string> { "CodeA" };
+        private const string Classification = "NOTIFICATION";
 
         private List<PersonInFunctionalRole> _persons;
         private PersonInFunctionalRole _personInFunctionalRole;
@@ -46,13 +47,14 @@ namespace Equinor.Procosys.Library.Query.Tests.GetFunctionalRoles
                 .Setup(x => x.CurrentValue)
                 .Returns(options);
 
-            _request = new GetFunctionalRolesByCodesQuery(Plant, Codes);
+            _request = new GetFunctionalRolesByCodesQuery(Plant, Codes, Classification);
 
             var functionalRoleCodes = Codes.Aggregate("", (current, code) => current + $"&functionalRoleCodes={code}");
 
             var url = $"{options.BaseAddress}Library/FunctionalRolesByCodes" +
                       $"?plantId={_request.Plant}" +
                       functionalRoleCodes +
+                      $"&classification={Classification}" +
                       $"&api-version={options.ApiVersion}";
 
             var functionalRoles = new List<MainApiFunctionalRole>
@@ -65,7 +67,6 @@ namespace Equinor.Procosys.Library.Query.Tests.GetFunctionalRoles
                         InformationEmail = "TestInfo1@email.com",
                         UsePersonalEmail = true,
                         Persons = _persons
-
                 },
             };
 
