@@ -32,7 +32,8 @@ namespace Equinor.Procosys.Library.Query.Tests.GetFunctionalRoles
                 AzureOid = "3BFB54C7-91E2-422E-833F-951AD07FE37F",
                 Email = "email@example.com",
                 FirstName = "FirstName",
-                LastName = "LastName"
+                LastName = "LastName",
+                UserName = "UN"
             };
 
             _persons = new List<PersonInFunctionalRole>
