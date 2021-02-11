@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Net;
 using System.Threading;
 using System.Threading.Tasks;
 using Equinor.Procosys.Library.Query.Client;
@@ -28,7 +29,7 @@ namespace Equinor.Procosys.Library.Query.GetFunctionalRoles
         public async Task<Result<IEnumerable<FunctionalRoleDto>>> Handle(GetFunctionalRolesByCodesQuery request,
             CancellationToken cancellationToken)
         {
-            var functionalRoleCodes = request.Codes.Aggregate("", (current, code) => current + $"&functionalRoleCodes={code}");
+            var functionalRoleCodes = request.Codes.Aggregate("", (current, code) => current + $"&functionalRoleCodes={WebUtility.UrlEncode(code)}");
 
             var url = $"{_baseAddress}Library/FunctionalRolesByCodes" +
                       $"?plantId={request.Plant}" +
