@@ -21,11 +21,11 @@
       <IncludeAssets>runtime; build; native; contentfiles; analyzers; buildtransitive</IncludeAssets>
     </PackageReference>
     <PackageReference Include="Microsoft.Extensions.Configuration.AzureKeyVault" Version="3.1.13" />
-    <PackageReference Include="Microsoft.IdentityModel.Clients.ActiveDirectory" Version="5.2.8" />
+    <PackageReference Include="Microsoft.IdentityModel.Clients.ActiveDirectory" Version="5.2.9" />
     <PackageReference Include="Microsoft.VisualStudio.Azure.Containers.Tools.Targets" Version="1.10.8" />
     <PackageReference Include="ServiceResult" Version="1.0.1" />
     <PackageReference Include="ServiceResult.ApiExtensions" Version="1.0.1" />
-    <PackageReference Include="Swashbuckle.AspNetCore" Version="6.1.0" />
+    <PackageReference Include="Swashbuckle.AspNetCore" Version="6.1.1" />
     <PackageReference Include="System.Net.Http" Version="4.3.4" />
   </ItemGroup>
 
