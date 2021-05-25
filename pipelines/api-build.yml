@@ -79,6 +79,7 @@ stages:
       kvIkeySecretName: '${{ variables.kvIkeySecretName }}'
       kvName: '${{ variables.kv }}'
       kvRgName: '${{ variables.kvRg }}'
+      replicas: 2
 
 # Test deploy stage
 - stage: test
@@ -115,6 +116,7 @@ stages:
       kvIkeySecretName: '${{ variables.kvIkeySecretName }}'
       kvName: '${{ variables.kv }}'
       kvRgName: '${{ variables.kvRg }}'
+      replicas: 2
 
 # Prod deploy stage
 - stage: prod
@@ -151,3 +153,4 @@ stages:
       kvIkeySecretName: '${{ variables.kvIkeySecretName }}'
       kvName: '${{ variables.kv }}'
       kvRgName: '${{ variables.kvRg }}'
+      replicas: 3
