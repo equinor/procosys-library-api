@@ -12,7 +12,7 @@ namespace Equinor.Procosys.Library.WebApi.Misc
         private readonly string _authority;
         private readonly string _clientId;
         private readonly string _clientSecret;
-        private readonly string _mainApiClientId;
+        private readonly string _mainApiAudience;
 
         public MainApiBearerTokenProvider(
             IHttpContextAccessor httpContextAccessor,
@@ -25,7 +25,7 @@ namespace Equinor.Procosys.Library.WebApi.Misc
             _clientId = apiOptions.CurrentValue.Audience;
             _clientSecret = apiOptions.CurrentValue.ClientSecret;
 
-            _mainApiClientId = mainApiOptions.CurrentValue.Audience;
+            _mainApiAudience = mainApiOptions.CurrentValue.Audience;
         }
 
         public async Task<string> GetBearerTokenAsync()
@@ -37,7 +37,7 @@ namespace Equinor.Procosys.Library.WebApi.Misc
             var userAssertion = new UserAssertion(userToken);
 
             var authContext = new AuthenticationContext(_authority);
-            var authenticationResult = await authContext.AcquireTokenAsync(_mainApiClientId, clientCred, userAssertion);
+            var authenticationResult = await authContext.AcquireTokenAsync(_mainApiAudience, clientCred, userAssertion);
             return authenticationResult?.AccessToken;
         }
     }
