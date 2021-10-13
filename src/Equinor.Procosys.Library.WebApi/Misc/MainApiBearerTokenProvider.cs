@@ -4,6 +4,7 @@ using Microsoft.AspNetCore.Http;
 using Microsoft.Extensions.Options;
 using Microsoft.IdentityModel.Clients.ActiveDirectory;
 
+
 namespace Equinor.Procosys.Library.WebApi.Misc
 {
     public class MainApiBearerTokenProvider : IBearerTokenProvider
