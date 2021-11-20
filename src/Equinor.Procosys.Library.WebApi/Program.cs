@@ -17,11 +17,16 @@ namespace Equinor.Procosys.Library.WebApi
             Host.CreateDefaultBuilder(args)
                 .ConfigureAppConfiguration((context, config) =>
                 {
-                    var kvSettings = new KeyVaultSettings();
-                    config.Build().GetSection("KeyVault").Bind(kvSettings);
-                    if (kvSettings.Enabled)
+                    var settings = config.Build();
+                    var azConfig = settings.GetValue<bool>("UseAzureAppConfiguration");
+                    if (azConfig)
                     {
-                        config.AddAzureKeyVault(kvSettings.Uri, kvSettings.ClientId, kvSettings.ClientSecret);
+                        var kvSettings = new KeyVaultSettings();
+                        settings.GetSection("KeyVault").Bind(kvSettings);
+                        if (kvSettings.Enabled)
+                        {
+                            config.AddAzureKeyVault(kvSettings.Uri, kvSettings.ClientId, kvSettings.ClientSecret);
+                        }
                     }
                 })
                 .ConfigureWebHostDefaults(webBuilder =>

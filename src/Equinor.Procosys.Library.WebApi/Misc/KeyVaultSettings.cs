@@ -1,6 +1,4 @@
-﻿using System;
-
-namespace Equinor.Procosys.Library.WebApi.Misc
+﻿namespace Equinor.Procosys.Library.WebApi.Misc
 {
     public class KeyVaultSettings
     {

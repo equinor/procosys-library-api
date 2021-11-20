@@ -1,14 +1,10 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
-using System.Reflection;
 using System.Text.Json.Serialization;
-using Equinor.Procosys.Library.Command;
-using Equinor.Procosys.Library.Query;
 using Equinor.Procosys.Library.WebApi.DIModules;
 using Equinor.Procosys.Library.WebApi.Middleware;
 using Equinor.Procosys.Library.WebApi.Validation;
-using FluentValidation.AspNetCore;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Builder;
@@ -18,7 +14,6 @@ using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
 using Microsoft.OpenApi.Models;
-using Swashbuckle.AspNetCore.Swagger;
 using Swashbuckle.AspNetCore.SwaggerUI;
 
 namespace Equinor.Procosys.Library.WebApi
@@ -26,27 +21,14 @@ namespace Equinor.Procosys.Library.WebApi
     public class Startup
     {
         private const string AllowAllOriginsCorsPolicy = "AllowAllOrigins";
-        private readonly IWebHostEnvironment _environment;
 
-        public Startup(IConfiguration configuration, IWebHostEnvironment webHostEnvironment)
-        {
-            Configuration = configuration;
-            _environment = webHostEnvironment;
-        }
+        public Startup(IConfiguration configuration) => Configuration = configuration;
 
         public IConfiguration Configuration { get; }
 
         // This method gets called by the runtime. Use this method to add services to the container.
         public void ConfigureServices(IServiceCollection services)
         {
-            //if (_environment.IsDevelopment())
-            //{
-            //    if (Configuration.GetValue<bool>("MigrateDatabase"))
-            //    {
-            //        services.AddHostedService<DatabaseMigrator>();
-            //    }
-            //}
-
             services.AddAuthentication(JwtBearerDefaults.AuthenticationScheme)
                 .AddJwtBearer(options =>
                 {

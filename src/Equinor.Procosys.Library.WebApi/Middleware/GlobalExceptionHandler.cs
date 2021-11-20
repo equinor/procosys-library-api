@@ -41,7 +41,7 @@ namespace Equinor.Procosys.Library.WebApi.Middleware
                 _logger.LogError(ex, "An exception occured");
                 context.Response.StatusCode = (int)HttpStatusCode.InternalServerError;
                 context.Response.ContentType = "application/text";
-                await context.Response.WriteAsync($"Something went wrong!");
+                await context.Response.WriteAsync("Something went wrong!");
             }
         }
 

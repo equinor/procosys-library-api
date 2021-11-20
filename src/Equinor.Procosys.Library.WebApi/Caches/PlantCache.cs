@@ -38,7 +38,7 @@ namespace Equinor.Procosys.Library.WebApi.Caches
         public async Task<bool> IsValidPlantForUserAsync(string plantId, Guid userOid)
         {
             var plantIds = await GetPlantIdsForUserOidAsync(userOid);
-            return plantIds.Contains(plantId);
+            return plantIds!= null && plantIds.Contains(plantId);
         }
 
         public void Clear(Guid userOid) => _cacheManager.Remove(PlantsCacheKey(userOid));
