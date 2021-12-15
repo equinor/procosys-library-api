@@ -1,7 +1,9 @@
 ﻿using Microsoft.AspNetCore.Hosting;
 using Microsoft.Extensions.Hosting;
 using Microsoft.Extensions.Configuration;
-using Equinor.Procosys.Library.WebApi.Misc;
+using Azure.Identity;
+using Microsoft.Extensions.Configuration.AzureAppConfiguration;
+using System;
 
 namespace Equinor.Procosys.Library.WebApi
 {
@@ -17,11 +19,27 @@ namespace Equinor.Procosys.Library.WebApi
             Host.CreateDefaultBuilder(args)
                 .ConfigureAppConfiguration((context, config) =>
                 {
-                    var kvSettings = new KeyVaultSettings();
-                    config.Build().GetSection("KeyVault").Bind(kvSettings);
-                    if (kvSettings.Enabled)
+                    var settings = config.Build();
+                    var azConfig = settings.GetValue<bool>("UseAzureAppConfiguration");
+
+                    if (azConfig)
                     {
-                        config.AddAzureKeyVault(kvSettings.Uri, kvSettings.ClientId, kvSettings.ClientSecret);
+                        config.AddAzureAppConfiguration(options =>
+                        {
+                            var connectionString = settings["ConnectionStrings:AppConfig"];
+                            options.Connect(connectionString)
+                                .ConfigureKeyVault(kv =>
+                                {
+                                    kv.SetCredential(new DefaultAzureCredential());
+                                })
+                                .Select(KeyFilter.Any)
+                                .Select(KeyFilter.Any, context.HostingEnvironment.EnvironmentName)
+                                .ConfigureRefresh(refreshOptions =>
+                                {
+                                    refreshOptions.Register("Sentinel", true);
+                                    refreshOptions.SetCacheExpiration(TimeSpan.FromSeconds(30));
+                                });
+                        });
                     }
                 })
                 .ConfigureWebHostDefaults(webBuilder =>

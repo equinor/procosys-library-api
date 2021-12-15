@@ -1,14 +1,10 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
-using System.Reflection;
 using System.Text.Json.Serialization;
-using Equinor.Procosys.Library.Command;
-using Equinor.Procosys.Library.Query;
 using Equinor.Procosys.Library.WebApi.DIModules;
 using Equinor.Procosys.Library.WebApi.Middleware;
 using Equinor.Procosys.Library.WebApi.Validation;
-using FluentValidation.AspNetCore;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Builder;
@@ -18,7 +14,6 @@ using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
 using Microsoft.OpenApi.Models;
-using Swashbuckle.AspNetCore.Swagger;
 using Swashbuckle.AspNetCore.SwaggerUI;
 
 namespace Equinor.Procosys.Library.WebApi
@@ -81,6 +76,11 @@ namespace Equinor.Procosys.Library.WebApi
             })
             .AddJsonOptions(options => options.JsonSerializerOptions.Converters.Add(new JsonStringEnumConverter()));
 
+            if (Configuration.GetValue<bool>("UseAzureAppConfiguration"))
+            {
+                services.AddAzureAppConfiguration();
+            }
+
             services.AddControllers();
 
             var scopes = Configuration.GetSection("Swagger:Scopes")?.Get<Dictionary<string, string>>() ?? new Dictionary<string, string>();
@@ -127,6 +127,11 @@ namespace Equinor.Procosys.Library.WebApi
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
         public void Configure(IApplicationBuilder app, IWebHostEnvironment env)
         {
+            if (Configuration.GetValue<bool>("UseAzureAppConfiguration"))
+            {
+                app.UseAzureAppConfiguration();
+            }
+
             if (env.IsDevelopment())
             {
                 app.UseDeveloperExceptionPage();
