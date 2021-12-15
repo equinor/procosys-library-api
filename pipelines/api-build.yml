@@ -56,9 +56,6 @@ stages:
     serviceConnection: '${{ variables.nonProdServiceConnection }}'
     containerRegistry: '${{ variables.containerRegistryName }}' 
     aspNetCoreEnvironment: 'Development'
-    kvUri: '$(kvUriName)'
-    kvClientId: '${{ variables.kvClientIdName }}'
-    kvClientSecret: '$(kvClientSecretName)'
     kv: '$(kvName)'
     kvRg: '$(envRgName)'
 
@@ -96,9 +93,6 @@ stages:
     serviceConnection: '${{ variables.nonProdServiceConnection }}'
     containerRegistry: '${{ variables.containerRegistryName }}' 
     aspNetCoreEnvironment: 'Test'
-    kvUri: '$(kvUriName)'
-    kvClientId: '$(kvClientIdName)'
-    kvClientSecret: '$(kvClientSecretName)'
     kv: '$(kvName)'
     kvRg: '$(envRgName)'
 
@@ -136,7 +130,6 @@ stages:
     serviceConnection: '${{ variables.prodServiceConnection }}'
     containerRegistry: '${{ variables.containerRegistryName }}' 
     aspNetCoreEnvironment: 'Prod'
-    kvUri: '$(kvUriName)'
     kvClientId: '$(kvClientIdName)'
     kvClientSecret: '$(kvClientSecretName)'
     kv: '$(kvName)'
