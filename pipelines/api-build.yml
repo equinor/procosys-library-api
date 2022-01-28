@@ -10,6 +10,7 @@ resources:
     type: github
     name: equinor/procosys-infra
     endpoint: 'equinor'
+    ref: fix/lib
 
 # Global variables for the pipeline
 variables:
@@ -48,7 +49,7 @@ stages:
 - stage: dev
   displayName: 'Dev'
   dependsOn: 'build'
-  condition: and(succeeded(), eq(variables['Build.SourceBranch'], 'refs/heads/master'))
+  condition: and(succeeded(), ne(variables['Build.SourceBranch'], 'refs/heads/master'))
   variables:
     envName: 'dev'
     envRg: '${{ variables.envRgName }}'
@@ -85,7 +86,7 @@ stages:
 - stage: test
   displayName: 'Test'
   dependsOn: 'dev'
-  condition: and(succeeded(), eq(variables['Build.SourceBranch'], 'refs/heads/master'))
+  condition: and(succeeded(), ne(variables['Build.SourceBranch'], 'refs/heads/master'))
   variables:
     envName: 'test'
     envRg: '${{ variables.envRgName }}'
