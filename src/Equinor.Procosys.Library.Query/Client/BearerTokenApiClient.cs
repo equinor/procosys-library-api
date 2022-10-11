@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Diagnostics;
+using System.Net;
 using System.Net.Http;
 using System.Net.Http.Headers;
 using System.Text.Json;
@@ -43,13 +44,19 @@ namespace Equinor.Procosys.Library.Query.Client
             var response = await httpClient.GetAsync(url);
             stopWatch.Stop();
 
+            var msg = $"{stopWatch.Elapsed.TotalMilliseconds}ms elapsed when requesting '{url}'. Status: {response.StatusCode}";
             if (!response.IsSuccessStatusCode)
             {
-                _logger.LogDebug($"Request was unsuccessful and took {stopWatch.Elapsed.TotalSeconds}s.");
-                return default;
+                if (response.StatusCode == HttpStatusCode.NotFound)
+                {
+                    _logger.LogWarning(msg);
+                    return default;
+                }
+                _logger.LogError(msg);
+                throw new Exception($"Requesting '{url}' was unsuccessful. Status={response.StatusCode}");
             }
 
-            _logger.LogDebug($"Request was successful and took {stopWatch.Elapsed.TotalSeconds}s.");
+            _logger.LogInformation(msg);
             var jsonResult = await response.Content.ReadAsStringAsync();
             var result = JsonSerializer.Deserialize<T>(jsonResult);
             return result;
