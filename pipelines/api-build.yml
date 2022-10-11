@@ -25,7 +25,6 @@ stages:
 # build stage. Docker build, tag and push
 - stage: build
   displayName: 'Build'
-  dependsOn: ''
   variables:
     envName: 'build'
     envRg: '${{ variables.envRgName }}'
