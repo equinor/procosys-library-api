@@ -2,7 +2,7 @@ trigger:
   branches:
     include:
       - master
-      - 95398_library_use_ai_connectionstring
+      - 95398_sentinel_support_v2
 
 resources:
   repositories:
