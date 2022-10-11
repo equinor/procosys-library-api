@@ -22,27 +22,10 @@ variables:
    value: 'library/api'
 
 stages:
-# Run tests Stage
-- stage: runtests
-  displayName: 'Run tests'
-  variables:
-    envName: 'runtests'
-    envGroupName: '$(globalPrefix)-$(fullAppName)-${{ variables.envName }}'
-    testPath: '$(Build.SourcesDirectory)/src/Equinor.ProCoSys.Library.sln'
-
-  jobs:
-  # Run Test
-  - template: /templates/pipelines/runtest.yml@templates
-    parameters:
-      deploymentName: 'runtests'
-      dependsOn: ''
-      envGroup: '${{ variables.envGroupName }}'
-      testPath: '${{ variables.testPath }}'
-
 # build stage. Docker build, tag and push
 - stage: build
   displayName: 'Build'
-  dependsOn: 'runtests'
+  dependsOn: ''
   variables:
     envName: 'build'
     envRg: '${{ variables.envRgName }}'
@@ -68,7 +51,7 @@ stages:
 - stage: dev
   displayName: 'Dev'
   dependsOn: 'build'
-  condition: and(succeeded(), eq(variables['Build.SourceBranch'], 'refs/heads/95398_library_use_ai_connectionstring'))
+  condition: and(succeeded(), neq(variables['Build.SourceBranch'], 'refs/heads/master'))
   variables:
     envName: 'dev'
     envRg: '${{ variables.envRgName }}'
