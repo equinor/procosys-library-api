@@ -50,7 +50,7 @@ stages:
 - stage: dev
   displayName: 'Dev'
   dependsOn: 'build'
-  condition: and(succeeded(), neq(variables['Build.SourceBranch'], 'refs/heads/master'))
+  condition: and(succeeded(), ne(variables['Build.SourceBranch'], 'refs/heads/master'))
   variables:
     envName: 'dev'
     envRg: '${{ variables.envRgName }}'
