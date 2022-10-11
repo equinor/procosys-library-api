@@ -2,6 +2,7 @@ trigger:
   branches:
     include:
       - master
+      - 95398_library_use_ai_connectionstring
 
 resources:
   repositories:
