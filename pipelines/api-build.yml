@@ -2,7 +2,6 @@ trigger:
   branches:
     include:
       - master
-      - 95398_sentinel_support_v2
 
 resources:
   repositories:
