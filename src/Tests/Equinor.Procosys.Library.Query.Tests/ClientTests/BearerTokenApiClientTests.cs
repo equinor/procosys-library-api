@@ -35,14 +35,12 @@ namespace Equinor.Procosys.Library.Query.Tests.ClientTests
         }
 
         [TestMethod]
-        public async Task QueryAndDeserializeReturnsDefaultObject_WhenRequestIsNotSuccessful()
+        public async Task QueryAndDeserialize_ThrowsException_WhenRequestIsNotSuccessful()
         {
             var httpClientFactory = HttpHelper.GetHttpClientFactory(HttpStatusCode.BadGateway, "");
             var dut = new BearerTokenApiClient(httpClientFactory, _bearerTokenProvider.Object, _logger.Object);
 
-            var response = await dut.QueryAndDeserializeAsync<DummyClass>("url");
-
-            Assert.AreEqual(default, response);
+            await Assert.ThrowsExceptionAsync<Exception>(async () => await dut.QueryAndDeserializeAsync<DummyClass>("url"));
         }
 
         [TestMethod]
