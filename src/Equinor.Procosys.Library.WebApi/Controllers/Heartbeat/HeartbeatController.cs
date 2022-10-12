@@ -23,13 +23,13 @@ namespace Equinor.Procosys.Library.WebApi.Controllers.Heartbeat
         [HttpGet("IsAlive")]
         public IActionResult IsAlive()
         {
-            var msg = $"The application is running at {TimeService.UtcNow:yyyy-MM-dd HH:mm:ss} UTC";
-            _logger.LogInformation(msg);
+            var timestampString = $"{TimeService.UtcNow:yyyy-MM-dd HH:mm:ss} UTC";
+            _logger.LogInformation($"The application is running at {timestampString}");
             _telemetryClient.TrackEvent("Heartbeat");
             return new JsonResult(new
             {
                 IsAlive = true,
-                TimeStamp = msg
+                TimeStamp = timestampString
             });
         }
     }
