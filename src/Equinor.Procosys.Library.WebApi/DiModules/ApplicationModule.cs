@@ -5,6 +5,7 @@ using Equinor.Procosys.Library.Query.Client;
 using Equinor.Procosys.Library.WebApi.Authorizations;
 using Equinor.Procosys.Library.WebApi.Caches;
 using Equinor.Procosys.Library.WebApi.Misc;
+using Equinor.Procosys.Library.WebApi.Telemetry;
 using Microsoft.AspNetCore.Authentication;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
@@ -31,6 +32,7 @@ namespace Equinor.Procosys.Library.WebApi.DIModules
 
 
             // Scoped - Created once per client request (connection)
+            services.AddScoped<ITelemetryClient, ApplicationInsightsTelemetryClient>();
             services.AddScoped<IBearerTokenApiClient, BearerTokenApiClient>();
             services.AddScoped<IBearerTokenProvider, MainApiBearerTokenProvider>();
             services.AddScoped<IPlantCache, PlantCache>();
