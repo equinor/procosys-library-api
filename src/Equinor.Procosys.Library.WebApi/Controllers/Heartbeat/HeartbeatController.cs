@@ -1,4 +1,5 @@
-﻿using Equinor.Procosys.Library.Domain.Time;
+﻿using System.ComponentModel.DataAnnotations;
+using Equinor.Procosys.Library.Domain.Time;
 using Equinor.Procosys.Library.WebApi.Telemetry;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
@@ -32,5 +33,21 @@ namespace Equinor.Procosys.Library.WebApi.Controllers.Heartbeat
                 TimeStamp = timestampString
             });
         }
+
+        [HttpPost("LogInfo")]
+        public void LogInfo([Required] string info)
+            => _logger.LogInformation($"Information: {info}");
+
+        [HttpPost("LogWarning")]
+        public void LogWarning([Required] string warning)
+            => _logger.LogWarning($"Warning: {warning}");
+
+        [HttpPost("LogError")]
+        public void LogError([Required] string error)
+            => _logger.LogError($"Error: {error}");
+
+        [HttpPost("LogException")]
+        public void LogException([Required] string error)
+            => _logger.LogError(new System.Exception(error), $"Exception: {error}");
     }
 }
