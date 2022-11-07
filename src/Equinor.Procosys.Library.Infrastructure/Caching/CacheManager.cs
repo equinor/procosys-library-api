@@ -24,7 +24,11 @@ namespace Equinor.Procosys.Library.Infrastructure.Caching
             var instance = Get<T>(key);
             if (instance != null)
             {
-                return instance;
+                var t = instance as Task;
+                if (t == null || t.IsCompletedSuccessfully)
+                {
+                    return instance;
+                }
             }
 
             instance = fetch.Invoke();
