@@ -24,8 +24,10 @@ namespace Equinor.Procosys.Library.Infrastructure.Caching
             var instance = Get<T>(key);
             if (instance != null)
             {
-                var t = instance as Task;
-                if (t == null || t.IsCompletedSuccessfully)
+                // return value from cache only if cached value is not a Task, or if the Task (i.e the async operation) has completed Successfully
+                // what could happen before rewrite, was when calling an endpoint such as getting Plants, and for some reason that endpoint failed,
+                // the cache continue to return the failed Task until cache expired
+                if (instance is not Task t || t.IsCompletedSuccessfully)
                 {
                     return instance;
                 }
