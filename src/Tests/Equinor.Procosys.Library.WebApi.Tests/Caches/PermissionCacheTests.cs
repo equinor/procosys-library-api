@@ -2,7 +2,9 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
+using Equinor.Procosys.Library.Domain.Time;
 using Equinor.Procosys.Library.Infrastructure.Caching;
+using Equinor.Procosys.Library.Test.Common;
 using Equinor.Procosys.Library.WebApi.Authorizations;
 using Equinor.Procosys.Library.WebApi.Caches;
 using Microsoft.Extensions.Options;
@@ -24,6 +26,7 @@ namespace Equinor.Procosys.Library.WebApi.Tests.Caches
         [TestInitialize]
         public void Setup()
         {
+            TimeService.SetProvider(new ManualTimeProvider(new DateTime(2020, 1, 1, 0, 0, 0, DateTimeKind.Utc)));
             _permissionApiServiceMock = new Mock<IPermissionApiService>();
             _permissionApiServiceMock.Setup(p => p.GetPermissionsAsync(TestPlant))
                 .Returns(Task.FromResult<IList<string>>(new List<string> {Permission1, Permission2}));
