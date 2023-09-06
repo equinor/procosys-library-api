@@ -1,10 +1,10 @@
-﻿using System.Threading.Tasks;
+﻿using System.Collections.Generic;
+using System.Threading.Tasks;
 using Equinor.Procosys.Library.Query.Client;
 using Microsoft.AspNetCore.Http;
 using Microsoft.Extensions.Logging;
 using Microsoft.Extensions.Options;
-using Microsoft.IdentityModel.Clients.ActiveDirectory;
-
+using Microsoft.Identity.Client;
 
 namespace Equinor.Procosys.Library.WebApi.Misc
 {
@@ -38,15 +38,27 @@ namespace Equinor.Procosys.Library.WebApi.Misc
         public async Task<string> GetBearerTokenAsync()
         {
             _logger.LogInformation($"Getting client credentials using {_secretInfo} for {_clientId}");
-            var clientCred = new ClientCredential(_clientId, _clientSecret);
+            //var clientCred = new ClientCredential(_clientId, _clientSecret);
 
             var authorizationHeader = _httpContextAccessor.HttpContext.Request.Headers["Authorization"];
             var userToken = authorizationHeader.ToString().Split(' ')[1];
             var userAssertion = new UserAssertion(userToken);
+            var scopes = new List<string> {_mainApiAudience + "/.default"};
 
-            var authContext = new AuthenticationContext(_authority);
-            var authenticationResult = await authContext.AcquireTokenAsync(_mainApiAudience, clientCred, userAssertion);
-            return authenticationResult?.AccessToken;
+            //var authContext = new AuthenticationContext(_authority);
+            var app = ConfidentialClientApplicationBuilder.Create(_clientId)
+                .WithClientSecret(_clientSecret)
+                .WithAuthority(_authority)
+                //.WithRedirectUri("something")
+                .WithLegacyCacheCompatibility(false)
+                .Build();
+
+            var authResult = app.AcquireTokenOnBehalfOf(scopes, userAssertion)
+                .ExecuteAsync()
+                .ConfigureAwait(false);
+            //var authenticationResult = await authContext.AcquireTokenAsync(_mainApiAudience, clientCred, userAssertion);
+            //return authenticationResult?.AccessToken;
+            return authResult.GetAwaiter().GetResult()?.AccessToken;
         }
     }
 }
