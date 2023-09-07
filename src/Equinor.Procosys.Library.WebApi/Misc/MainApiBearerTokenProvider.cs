@@ -53,11 +53,11 @@ namespace Equinor.Procosys.Library.WebApi.Misc
             var userAssertion = new UserAssertion(userToken);
             var scopes = new List<string> { _mainApiAudience + "/.default" };
 
-            var authResult = await app.AcquireTokenOnBehalfOf(scopes, userAssertion)
+            var authenticationResult = await app.AcquireTokenOnBehalfOf(scopes, userAssertion)
                 .ExecuteAsync()
                 .ConfigureAwait(false);
 
-            return authResult?.AccessToken;
+            return authenticationResult?.AccessToken;
         }
     }
 }
