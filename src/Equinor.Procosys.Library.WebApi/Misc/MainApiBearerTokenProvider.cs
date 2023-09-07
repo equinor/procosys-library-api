@@ -2,10 +2,10 @@
 using System.Threading.Tasks;
 using Equinor.Procosys.Library.Query.Client;
 using Microsoft.AspNetCore.Http;
-using Microsoft.Extensions.Caching.Memory;
 using Microsoft.Extensions.Logging;
 using Microsoft.Extensions.Options;
 using Microsoft.Identity.Client;
+using Microsoft.Identity.Web;
 
 namespace Equinor.Procosys.Library.WebApi.Misc
 {
@@ -46,7 +46,7 @@ namespace Equinor.Procosys.Library.WebApi.Misc
                 .WithLegacyCacheCompatibility(false)
                 .Build();
 
-            //TODO: Add token cache
+            app.AddInMemoryTokenCache();
 
             var authorizationHeader = _httpContextAccessor.HttpContext.Request.Headers["Authorization"];
             var userToken = authorizationHeader.ToString().Split(' ')[1];
