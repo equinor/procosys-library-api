@@ -52,6 +52,7 @@ namespace Equinor.Procosys.Library.Query.GetFunctionalRoles
                 mainApiFunctionalRoles.Select(fr =>
                     new FunctionalRoleDto(
                         fr.Code,
+                        fr.ProCoSysGuid,
                         fr.Description,
                         fr.Email,
                         fr.InformationEmail,
