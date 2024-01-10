@@ -1,7 +1,7 @@
 trigger:
   branches:
     include:
-      - master
+      - pbi/104954_Move_New_Library_API_to_Radix
 
 resources:
   repositories:
