@@ -39,7 +39,7 @@ stages:
       testPath: '${{ variables.testPath }}'
 
 # build stage. Docker build, tag and push
-- stage: build
+- stage: Build
   displayName: 'Build'
   dependsOn: 'runtests'
   variables:
@@ -66,7 +66,7 @@ stages:
 # Dev deploy stage
 - stage: DeployDev
   displayName: 'Dev'
-  dependsOn: 'build'
+  dependsOn: 'Build'
   condition: and(succeeded(), eq(variables['Build.SourceBranch'], 'refs/heads/pbi/104954_Move_New_Library_API_to_Radix')) #TODO
   variables:
     envName: 'dev'
@@ -95,7 +95,7 @@ stages:
 # Test deploy stage
 - stage: DeployTest
   displayName: 'Test'
-  dependsOn: 'dev'
+  dependsOn: 'DeployDev'
   condition: and(succeeded(), eq(variables['Build.SourceBranch'], 'refs/heads/pbi/104954_Move_New_Library_API_to_Radix')) #TODO
   variables:
     envName: 'test'
@@ -123,9 +123,9 @@ stages:
                   deploymentName: $(radixJobName)
 
 # Prod deploy stage
-- stage: prod
+- stage: DeployProd
   displayName: 'Prod'
-  dependsOn: 'test'
+  dependsOn: 'DeployTest'
   condition: and(succeeded(), eq(variables['Build.SourceBranch'], 'refs/heads/pbi/104954_Move_New_Library_API_to_Radix')) #TODO
   variables:
     envName: 'prod'
