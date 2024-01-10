@@ -64,10 +64,10 @@ stages:
       dockerRegistryServiceConnection: $(dockerRegistryServiceConnectionName)
 
 # Dev deploy stage
-- stage: dev
+- stage: DeployDev
   displayName: 'Dev'
   dependsOn: 'build'
-  condition: and(succeeded(), eq(variables['Build.SourceBranch'], 'refs/heads/master'))
+  condition: and(succeeded(), eq(variables['Build.SourceBranch'], 'refs/heads/pbi/104954_Move_New_Library_API_to_Radix')) #TODO
   variables:
     envName: 'dev'
     envRg: '${{ variables.envRgName }}'
@@ -77,32 +77,26 @@ stages:
     aspNetCoreEnvironment: 'Development'
     kv: '$(kvName)'
     kvRg: '$(envRgName)'
-
   jobs:
-  - template: /templates/pipelines/kubernetes/library-deploy.yml@templates
-    parameters:
-      deploymentName: 'deploy_dev_to_k8s'
-      dependsOn: ''
-      serviceConnection: '${{ variables.serviceConnection }}'
-      env: '${{ variables.envName }}'
-      envRg: 'pcs-hosting-rg'
-      envGroup: '${{ variables.envGroupName }}'
-      dockerImage: 'procosys.azurecr.io/library/api:$(Build.BuildId)'
-      clusterName: 'pcs-aks-test'
-      kvTenantIdSecret: '${{ variables.kvTenantIdSecret }}'
-      kvClientIdName: '${{ variables.kvClientIdName }}'
-      kvClientSecretName: '${{ variables.kvClientSecretName }}'
-      kvConnStringsSecret: '${{ variables.kvConnStringsSecret }}'
-      aspNetCoreEnvironment: '${{ variables.aspNetCoreEnvironment }}'
-      kvName: '${{ variables.kv }}'
-      kvRgName: '${{ variables.kvRg }}'
-      replicas: 2
+    - deployment: Deploy
+      displayName: Migrate DB & deploy
+      environment: '${{ variables.envGroupName }}'
+      pool:
+        vmImage: 'windows-latest'
+      strategy:
+        runOnce:
+          deploy:
+            steps:
+              # Deploy to Radix
+              - template: templates/radix-deploy.yml
+                parameters:
+                  imageTagNameBackend: '${{ variables.versionNumber }}$(Build.BuildId)'
 
 # Test deploy stage
-- stage: test
+- stage: DeployTest
   displayName: 'Test'
   dependsOn: 'dev'
-  condition: and(succeeded(), eq(variables['Build.SourceBranch'], 'refs/heads/master'))
+  condition: and(succeeded(), eq(variables['Build.SourceBranch'], 'refs/heads/pbi/104954_Move_New_Library_API_to_Radix')) #TODO
   variables:
     envName: 'test'
     envRg: '${{ variables.envRgName }}'
@@ -112,32 +106,27 @@ stages:
     aspNetCoreEnvironment: 'Test'
     kv: '$(kvName)'
     kvRg: '$(envRgName)'
-
   jobs:
-  - template: /templates/pipelines/kubernetes/library-deploy.yml@templates
-    parameters:
-      deploymentName: 'deploy_test_to_k8s'
-      dependsOn: ''
-      serviceConnection: '${{ variables.serviceConnection }}'
-      env: '${{ variables.envName }}'
-      envRg: 'pcs-hosting-rg'
-      envGroup: '${{ variables.envGroupName }}'
-      dockerImage: 'procosys.azurecr.io/library/api:$(Build.BuildId)'
-      clusterName: 'pcs-aks-test'
-      kvTenantIdSecret: '${{ variables.kvTenantIdSecret }}'
-      kvClientIdName: '${{ variables.kvClientIdName }}'
-      kvClientSecretName: '${{ variables.kvClientSecretName }}'
-      kvConnStringsSecret: '${{ variables.kvConnStringsSecret }}'
-      aspNetCoreEnvironment: '${{ variables.aspNetCoreEnvironment }}'
-      kvName: '${{ variables.kv }}'
-      kvRgName: '${{ variables.kvRg }}'
-      replicas: 2
+    - deployment: Deploy
+      displayName: Promote to test
+      environment: '${{ variables.envGroupName }}'
+      pool:
+        vmImage: 'windows-latest'
+      strategy:
+        runOnce:
+          deploy:
+            steps:
+              - template: templates/radix-promote-env.yml
+                parameters:
+                  fromEnvironment: $(radixPromoteFromEnv)
+                  toEnvironment: $(envName)
+                  deploymentName: $(radixJobName)
 
 # Prod deploy stage
 - stage: prod
   displayName: 'Prod'
   dependsOn: 'test'
-  condition: and(succeeded(), eq(variables['Build.SourceBranch'], 'refs/heads/master'))
+  condition: and(succeeded(), eq(variables['Build.SourceBranch'], 'refs/heads/pbi/104954_Move_New_Library_API_to_Radix')) #TODO
   variables:
     envName: 'prod'
     envRg: '${{ variables.envRgName }}'
@@ -149,23 +138,18 @@ stages:
     kvClientSecret: '$(kvClientSecretName)'
     kv: '$(kvName)'
     kvRg: '$(envRgName)'
-
   jobs:
-  - template: /templates/pipelines/kubernetes/library-deploy.yml@templates
-    parameters:
-      deploymentName: 'deploy_prod_to_k8s'
-      dependsOn: ''
-      serviceConnection: '${{ variables.serviceConnection }}'
-      env: '${{ variables.envName }}'
-      envRg: 'pcs-hosting-rg'
-      envGroup: '${{ variables.envGroupName }}'
-      dockerImage: 'procosys.azurecr.io/library/api:$(Build.BuildId)'
-      clusterName: 'pcs-aks-prod'
-      kvTenantIdSecret: '${{ variables.kvTenantIdSecret }}'
-      kvClientIdName: '${{ variables.kvClientIdName }}'
-      kvClientSecretName: '${{ variables.kvClientSecretName }}'
-      aspNetCoreEnvironment: '${{ variables.aspNetCoreEnvironment }}'
-      kvConnStringsSecret: '${{ variables.kvConnStringsSecret }}'
-      kvName: '${{ variables.kv }}'
-      kvRgName: '${{ variables.kvRg }}'
-      replicas: 3
+    - deployment: Deploy
+      displayName: Promote to prod
+      environment: '${{ variables.envGroupName }}'
+      pool:
+        vmImage: 'windows-latest'
+      strategy:
+        runOnce:
+          deploy:
+            steps:
+              - template: templates/radix-promote-env.yml
+                parameters:
+                  fromEnvironment: $(radixPromoteFromEnv)
+                  toEnvironment: $(envName)
+                  deploymentName: $(radixJobName)
