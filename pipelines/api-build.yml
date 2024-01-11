@@ -99,7 +99,7 @@ stages:
     radixPromoteFromEnv: 'dev'
     radixJobName: $[ stageDependencies.DeployDev.Deploy.outputs['Deploy.RADIXJOB.radixJobName'] ] # This variable must have been set by previous step
 
-    jobs:
+  jobs:
     - deployment: Deploy
       displayName: Promote to test
       environment: '${{ variables.envGroupName }}'
