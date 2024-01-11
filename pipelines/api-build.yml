@@ -79,7 +79,7 @@ stages:
     kvRg: '$(envRgName)'
   jobs:
     - deployment: Deploy
-      displayName: Migrate DB & deploy
+      displayName: Deploy to dev
       environment: '${{ variables.envGroupName }}'
       pool:
         vmImage: 'windows-latest'
@@ -99,13 +99,9 @@ stages:
   condition: and(succeeded(), eq(variables['Build.SourceBranch'], 'refs/heads/pbi/104954_Move_New_Library_API_to_Radix')) #TODO
   variables:
     envName: 'test'
-    envRg: '${{ variables.envRgName }}'
     envGroupName: '$(globalPrefix)-$(fullAppName)-${{ variables.envName }}'
     serviceConnection: '${{ variables.nonProdServiceConnection }}'
-    containerRegistry: '${{ variables.containerRegistryName }}' 
-    aspNetCoreEnvironment: 'Test'
-    kv: '$(kvName)'
-    kvRg: '$(envRgName)'
+    radixPromoteFromEnv: 'dev'
   jobs:
     - deployment: Deploy
       displayName: Promote to test
@@ -129,15 +125,9 @@ stages:
   condition: and(succeeded(), eq(variables['Build.SourceBranch'], 'refs/heads/pbi/104954_Move_New_Library_API_to_Radix')) #TODO
   variables:
     envName: 'prod'
-    envRg: '${{ variables.envRgName }}'
     envGroupName: '$(globalPrefix)-$(fullAppName)-${{ variables.envName }}'
-    serviceConnection: '${{ variables.prodServiceConnection }}'
-    containerRegistry: '${{ variables.containerRegistryName }}' 
-    aspNetCoreEnvironment: 'Prod'
-    kvClientId: '$(kvClientIdName)'
-    kvClientSecret: '$(kvClientSecretName)'
-    kv: '$(kvName)'
-    kvRg: '$(envRgName)'
+    serviceConnection: '${{ variables.nonProdServiceConnection }}'
+    radixPromoteFromEnv: 'test'
   jobs:
     - deployment: Deploy
       displayName: Promote to prod
