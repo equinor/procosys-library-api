@@ -72,7 +72,7 @@ stages:
     envName: 'dev'
     envGroupName: '$(globalPrefix)-$(fullAppName)-${{ variables.envName }}'
     serviceConnection: '${{ variables.nonProdServiceConnection }}'
-    jobs:
+  jobs:
     - deployment: Deploy
       displayName: Deploy to dev
       environment: '${{ variables.envGroupName }}'
