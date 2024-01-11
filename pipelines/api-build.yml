@@ -97,7 +97,9 @@ stages:
     envGroupName: '$(globalPrefix)-$(fullAppName)-${{ variables.envName }}'
     serviceConnection: '${{ variables.nonProdServiceConnection }}'
     radixPromoteFromEnv: 'dev'
-  jobs:
+    radixJobName: $[ stageDependencies.DeployDev.Deploy.outputs['Deploy.RADIXJOB.radixJobName'] ] # This variable must have been set by previous step
+
+    jobs:
     - deployment: Deploy
       displayName: Promote to test
       environment: '${{ variables.envGroupName }}'
@@ -123,6 +125,8 @@ stages:
     envGroupName: '$(globalPrefix)-$(fullAppName)-${{ variables.envName }}'
     serviceConnection: '${{ variables.nonProdServiceConnection }}'
     radixPromoteFromEnv: 'test'
+    radixJobName: $[ stageDependencies.DeployTest.Deploy.outputs['Deploy.RADIXJOB.radixJobName'] ] # This variable must have been set by previous step
+  
   jobs:
     - deployment: Deploy
       displayName: Promote to prod
