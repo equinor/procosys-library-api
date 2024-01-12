@@ -41,7 +41,7 @@ WORKDIR "/src/Equinor.Procosys.Library.WebApi"
 RUN dotnet publish "Equinor.Procosys.Library.WebApi.csproj" -c Release --no-restore -o /app/publish
 
 # Define the image used for the final result
-FROM mcr.microsoft.com/dotnet/aspnet:6.0 AS base
+FROM mcr.microsoft.com/dotnet/aspnet:7.0 AS base
 # Create non-root user. Set ui to 9999 to avoid conflicts with host OS just in case
 RUN adduser --disabled-password --uid 9999 --gecos "" apprunner
 # Create the folder and set the non-root as owner
