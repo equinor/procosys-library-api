@@ -60,7 +60,7 @@ spec:
     - environment: prod
       identity:
         azure:
-          clientId: 1eb50c54-e897-4216-93d0-6ca86b0cf681
+          clientId: 6263b7e6-155f-411b-9503-c5c841a601e0
       variables:
         ASPNETCORE_ENVIRONMENT: 'Production'
         UseAzureAppConfiguration: 'true'
