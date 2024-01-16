@@ -1,10 +1,12 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
 
 namespace Equinor.Procosys.Library.Query.GetFunctionalRoles
 {
     public class FunctionalRoleDto
     {
         public FunctionalRoleDto(
+            Guid proCoSysGuid,
             string code,
             string description,
             string email,
@@ -12,6 +14,7 @@ namespace Equinor.Procosys.Library.Query.GetFunctionalRoles
             bool? usePersonalEmail,
             IEnumerable<PersonInFunctionalRole> persons)
         {
+            ProCoSysGuid = proCoSysGuid;
             Code = code;
             Description = description;
             Email = email;
@@ -20,6 +23,7 @@ namespace Equinor.Procosys.Library.Query.GetFunctionalRoles
             Persons = persons;
         }
 
+        public Guid ProCoSysGuid { get; }
         public string Code { get; }
         public string Description { get; }
         public string Email { get; }
