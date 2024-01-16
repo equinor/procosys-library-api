@@ -1,7 +1,7 @@
 trigger:
   branches:
     include:
-      - pbi/104954_Move_New_Library_API_to_Radix
+      - master
 
 resources:
   repositories:
@@ -67,7 +67,7 @@ stages:
 - stage: DeployDev
   displayName: 'Dev'
   dependsOn: 'Build'
-  condition: and(succeeded(), eq(variables['Build.SourceBranch'], 'refs/heads/pbi/104954_Move_New_Library_API_to_Radix')) #TODO
+  condition: and(succeeded(), eq(variables['Build.SourceBranch'], 'refs/heads/master')) 
   variables:
     envName: 'dev'
     envGroupName: '$(globalPrefix)-$(fullAppName)-${{ variables.envName }}'
@@ -91,7 +91,7 @@ stages:
 - stage: DeployTest
   displayName: 'Test'
   dependsOn: 'DeployDev'
-  condition: and(succeeded(), eq(variables['Build.SourceBranch'], 'refs/heads/pbi/104954_Move_New_Library_API_to_Radix')) #TODO
+  condition: and(succeeded(), eq(variables['Build.SourceBranch'], 'refs/heads/master')) 
   variables:
     envName: 'test'
     envGroupName: '$(globalPrefix)-$(fullAppName)-${{ variables.envName }}'
@@ -119,7 +119,7 @@ stages:
 - stage: DeployProd
   displayName: 'Prod'
   dependsOn: 'DeployTest'
-  condition: and(succeeded(), eq(variables['Build.SourceBranch'], 'refs/heads/pbi/104954_Move_New_Library_API_to_Radix')) #TODO
+  condition: and(succeeded(), eq(variables['Build.SourceBranch'], 'refs/heads/master'))
   variables:
     envName: 'prod'
     envGroupName: '$(globalPrefix)-$(fullAppName)-${{ variables.envName }}'
