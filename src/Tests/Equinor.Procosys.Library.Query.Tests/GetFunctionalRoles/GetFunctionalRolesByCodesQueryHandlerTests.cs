@@ -1,4 +1,5 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
 using Equinor.Procosys.Library.Query.Client;
@@ -14,20 +15,20 @@ namespace Equinor.Procosys.Library.Query.Tests.GetFunctionalRoles
     public class GetFunctionalRolesByCodesQueryHandlerTests
     {
         private const string Plant = "PCS$TESTPLANT";
-        private readonly List<string> Codes = new List<string> { "CodeA" };
+        private readonly List<string> _codes = new() { "CodeA" };
         private const string Classification = "NOTIFICATION";
 
-        private List<PersonInFunctionalRole> _persons;
         private PersonInFunctionalRole _personInFunctionalRole;
         private Mock<IOptionsMonitor<MainApiOptions>> _optionsMonitorMock;
         private Mock<IBearerTokenApiClient> _clientMock;
         private GetFunctionalRolesByCodesQueryHandler _dut;
         private GetFunctionalRolesByCodesQuery _request;
+        private MainApiFunctionalRole _mainApiFunctionalRole;
 
         [TestInitialize]
         public void Setup()
         {
-            _personInFunctionalRole = new PersonInFunctionalRole()
+            _personInFunctionalRole = new PersonInFunctionalRole
             {
                 AzureOid = "3BFB54C7-91E2-422E-833F-951AD07FE37F",
                 Email = "email@example.com",
@@ -36,7 +37,7 @@ namespace Equinor.Procosys.Library.Query.Tests.GetFunctionalRoles
                 UserName = "UN"
             };
 
-            _persons = new List<PersonInFunctionalRole>
+            var persons = new List<PersonInFunctionalRole>
             {
                 _personInFunctionalRole
             };
@@ -48,9 +49,9 @@ namespace Equinor.Procosys.Library.Query.Tests.GetFunctionalRoles
                 .Setup(x => x.CurrentValue)
                 .Returns(options);
 
-            _request = new GetFunctionalRolesByCodesQuery(Plant, Codes, Classification);
+            _request = new GetFunctionalRolesByCodesQuery(Plant, _codes, Classification);
 
-            var functionalRoleCodes = Codes.Aggregate("", (current, code) => current + $"&functionalRoleCodes={code}");
+            var functionalRoleCodes = _codes.Aggregate("", (current, code) => current + $"&functionalRoleCodes={code}");
 
             var url = $"{options.BaseAddress}Library/FunctionalRolesByCodes" +
                       $"?plantId={_request.Plant}" +
@@ -58,17 +59,19 @@ namespace Equinor.Procosys.Library.Query.Tests.GetFunctionalRoles
                       $"&classification={Classification}" +
                       $"&api-version={options.ApiVersion}";
 
+            _mainApiFunctionalRole = new MainApiFunctionalRole()
+            {
+                ProCoSysGuid = Guid.NewGuid(),
+                Code = "CodeA",
+                Description = "DescriptionA",
+                Email = "Test1@email.com",
+                InformationEmail = "TestInfo1@email.com",
+                UsePersonalEmail = true,
+                Persons = persons
+            };
             var functionalRoles = new List<MainApiFunctionalRole>
             {
-                new MainApiFunctionalRole 
-                {
-                        Code = "CodeA",
-                        Description = "DescriptionA",
-                        Email = "Test1@email.com",
-                        InformationEmail = "TestInfo1@email.com",
-                        UsePersonalEmail = true,
-                        Persons = _persons
-                },
+                _mainApiFunctionalRole
             };
 
             _clientMock = new Mock<IBearerTokenApiClient>();
@@ -99,13 +102,14 @@ namespace Equinor.Procosys.Library.Query.Tests.GetFunctionalRoles
         {
             var result = await _dut.Handle(_request, default);
 
-            Assert.AreEqual("CodeA", result.Data.ElementAt(0).Code);
-            Assert.AreEqual("DescriptionA", result.Data.ElementAt(0).Description);
-            Assert.AreEqual("Test1@email.com", result.Data.ElementAt(0).Email);
-            Assert.AreEqual("TestInfo1@email.com", result.Data.ElementAt(0).InformationEmail);
-            var fr1UsePersonalEmail = result.Data.ElementAt(0).UsePersonalEmail;
-            Assert.IsTrue(fr1UsePersonalEmail != null && fr1UsePersonalEmail.Value);
-            Assert.AreEqual(_persons, result.Data.ElementAt(0).Persons);
+            var functionalRoleDto = result.Data.ElementAt(0);
+            Assert.AreEqual(_mainApiFunctionalRole.ProCoSysGuid, functionalRoleDto.ProCoSysGuid);
+            Assert.AreEqual(_mainApiFunctionalRole.Code, functionalRoleDto.Code);
+            Assert.AreEqual(_mainApiFunctionalRole.Description, functionalRoleDto.Description);
+            Assert.AreEqual(_mainApiFunctionalRole.Email, functionalRoleDto.Email);
+            Assert.AreEqual(_mainApiFunctionalRole.InformationEmail, functionalRoleDto.InformationEmail);
+            Assert.AreEqual(_mainApiFunctionalRole.UsePersonalEmail, functionalRoleDto.UsePersonalEmail);
+            Assert.AreEqual(_mainApiFunctionalRole.Persons, functionalRoleDto.Persons);
         }
 
         [TestMethod]
