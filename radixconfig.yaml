@@ -1,0 +1,82 @@
+apiVersion: radix.equinor.com/v1
+kind: RadixApplication
+metadata:
+  name: procosys-library-api
+spec:
+  environments:
+  - name: dev
+  - name: test
+  - name: prod
+
+  components:
+  # ---------
+  # Backend
+  #---------- 
+
+  - name: backend
+    image: procosys.azurecr.io/library/api:{imageTagName}
+    ports:
+    - name: http
+      port: 5000
+    publicPort: http
+    secrets:
+    - CONNECTIONSTRINGS__APPCONFIG
+    environmentConfig:
+    # Development environment
+    - environment: dev
+      identity:
+        azure:
+          clientId: fdf5086c-009f-4407-b7bb-d2ece26dea45
+      imageTagName: latest
+      variables:
+        ASPNETCORE_ENVIRONMENT: 'Development'
+        UseAzureAppConfiguration: 'true'
+      monitoring: true
+      resources:
+        requests:
+          memory: '256Mi'
+          cpu: '100m'
+        limits:
+          memory: '256Mi'
+          cpu: '250m'
+    # Test environment
+    - environment: test
+      identity:
+        azure:
+          clientId: 2df224e7-32fc-4dd8-83b8-d0222327b558
+      variables:
+        ASPNETCORE_ENVIRONMENT: 'Test'
+        UseAzureAppConfiguration: 'true'
+      monitoring: true
+      replicas: 2
+      resources:
+        requests:
+          memory: '256Mi'
+          cpu: '100m'
+        limits:
+          memory: '256Mi'
+          cpu: '250m'
+    # Prod environment
+    - environment: prod
+      identity:
+        azure:
+          clientId: 6263b7e6-155f-411b-9503-c5c841a601e0
+      variables:
+        ASPNETCORE_ENVIRONMENT: 'Production'
+        UseAzureAppConfiguration: 'true'
+      monitoring: false
+      replicas: 3
+      resources:
+        requests:
+          memory: '256Mi'
+          cpu: '200m'
+        limits:
+          memory: '256Mi'
+          cpu: '500m'
+  #--------------------------------
+  # External docker image registry
+  #--------------------------------
+  privateImageHubs:
+    procosys.azurecr.io:
+      username: 9d3898e4-730f-4fb5-8ddf-a5de51537896
+      email: arbje@equinor.com

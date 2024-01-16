@@ -1,4 +1,4 @@
-FROM mcr.microsoft.com/dotnet/sdk:6.0 AS build
+FROM mcr.microsoft.com/dotnet/sdk:7.0 AS build
 WORKDIR /src
 
 # Copy solution and project files separately and restore NuGet packages to create layers
@@ -41,13 +41,13 @@ WORKDIR "/src/Equinor.Procosys.Library.WebApi"
 RUN dotnet publish "Equinor.Procosys.Library.WebApi.csproj" -c Release --no-restore -o /app/publish
 
 # Define the image used for the final result
-FROM mcr.microsoft.com/dotnet/aspnet:6.0 AS base
+FROM mcr.microsoft.com/dotnet/aspnet:7.0 AS base
 # Create non-root user. Set ui to 9999 to avoid conflicts with host OS just in case
 RUN adduser --disabled-password --uid 9999 --gecos "" apprunner
 # Create the folder and set the non-root as owner
 RUN mkdir /app && chown apprunner.apprunner /app
 # Change the user from root to non-root- From now on, all Docker commands are run as non-root user (except for COPY)
-USER apprunner
+USER 9999
 # Set the port to 5000 since the default production port is 80 and on-root users cannot bind to this port
 ENV ASPNETCORE_URLS http://+:5000
 EXPOSE 5000
