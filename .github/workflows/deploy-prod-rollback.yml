@@ -12,7 +12,7 @@ jobs:
   deploy:
     uses: ./.github/workflows/deploy.yml
     with:
-      environment: prod
+      environment: prod-rollback
       radix-environment: prod
       ref: ${{ inputs.ref }}
     secrets: inherit

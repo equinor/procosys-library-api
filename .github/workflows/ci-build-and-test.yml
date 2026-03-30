@@ -1,4 +1,4 @@
-name: CI - Run Tests
+name: 🤖 Build and Test
 
 on:
   pull_request:
@@ -7,13 +7,13 @@ on:
       - synchronize
     branches:
       - main
-      - master
 
 jobs:
   test:
     name: Unit Tests
     runs-on: ubuntu-latest
     strategy:
+      fail-fast: false
       matrix:
         test-project:
           - Equinor.Procosys.Library.Command.Tests

@@ -10,7 +10,6 @@ on:
       - synchronize
     branches:
       - main
-      - master
 
 jobs:
   main:
