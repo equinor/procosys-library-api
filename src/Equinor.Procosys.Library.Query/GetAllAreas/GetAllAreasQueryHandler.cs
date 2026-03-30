@@ -27,7 +27,7 @@ namespace Equinor.Procosys.Library.Query.GetAllAreas
 
         public async Task<Result<IEnumerable<AreaDto>>> Handle(GetAllAreasQuery request, CancellationToken cancellationToken)
         {
-            var url = $"{ _baseAddress}Library/Areas" +
+            var url = $"{_baseAddress}Library/Areas" +
                 $"?plantId={request.Plant}" +
                 $"&api-version={_apiVersion}";
 

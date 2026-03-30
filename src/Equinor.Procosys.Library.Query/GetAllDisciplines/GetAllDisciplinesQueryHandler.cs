@@ -27,10 +27,10 @@ namespace Equinor.Procosys.Library.Query.GetAllDisciplines
 
         public async Task<Result<IEnumerable<DisciplineDto>>> Handle(GetAllDisciplinesQuery request, CancellationToken cancellationToken)
         {
-            var url = $"{ _baseAddress}Library/Disciplines" +
+            var url = $"{_baseAddress}Library/Disciplines" +
                 $"?plantId={request.Plant}" +
                 string.Join("", request.Classifications
-                    .Where(c => c!= null)
+                    .Where(c => c != null)
                     .Select(c => $"&classifications={c.ToUpper()}")) +
                 $"&api-version={_apiVersion}";
 
