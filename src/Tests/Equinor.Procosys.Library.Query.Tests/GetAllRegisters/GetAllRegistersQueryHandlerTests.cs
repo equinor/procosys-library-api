@@ -39,7 +39,7 @@ namespace Equinor.Procosys.Library.Query.Tests.GetAllRegisters
                 $"?plantId={_request.Plant}" +
                 $"&api-version={options.ApiVersion}";
 
-           var registers = new List<MainApiRegister>
+            var registers = new List<MainApiRegister>
                 {
                     new MainApiRegister
                     {

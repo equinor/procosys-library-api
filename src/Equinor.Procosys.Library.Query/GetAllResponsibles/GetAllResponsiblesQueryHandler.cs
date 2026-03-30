@@ -27,7 +27,7 @@ namespace Equinor.Procosys.Library.Query.GetAllResponsibles
 
         public async Task<Result<IEnumerable<ResponsibleDto>>> Handle(GetAllResponsiblesQuery request, CancellationToken cancellationToken)
         {
-            var url = $"{ _baseAddress}Library/Responsibles" +
+            var url = $"{_baseAddress}Library/Responsibles" +
                       $"?plantId={request.Plant}" +
                       $"&api-version={_apiVersion}";
 

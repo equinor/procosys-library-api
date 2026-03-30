@@ -15,8 +15,8 @@ namespace Equinor.Procosys.Library.WebApi.Caches
         private readonly IOptionsMonitor<CacheOptions> _options;
 
         public PlantCache(
-            ICacheManager cacheManager, 
-            IPlantApiService plantApiService, 
+            ICacheManager cacheManager,
+            IPlantApiService plantApiService,
             IOptionsMonitor<CacheOptions> options)
         {
             _cacheManager = cacheManager;

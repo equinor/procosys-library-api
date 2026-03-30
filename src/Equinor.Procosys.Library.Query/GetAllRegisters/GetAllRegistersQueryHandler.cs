@@ -27,7 +27,7 @@ namespace Equinor.Procosys.Library.Query.GetAllRegisters
 
         public async Task<Result<IEnumerable<RegisterDto>>> Handle(GetAllRegistersQuery request, CancellationToken cancellationToken)
         {
-            var url = $"{ _baseAddress}Library/Registers" +
+            var url = $"{_baseAddress}Library/Registers" +
                 $"?plantId={request.Plant}" +
                 $"&api-version={_apiVersion}";
 
