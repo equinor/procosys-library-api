@@ -46,9 +46,9 @@ jobs:
 
       - name: Build and push Docker image
         id: docker-build
-        uses: ./.github/actions/docker-build-push-if-exists
+        uses: ./.github/actions/docker-build-push-if-not-exists
         with:
-          image-tag: ${{ steps.change-id.outputs.change-id }}
+          tag: ${{ steps.change-id.outputs.change-id }}
 
   deploy-to-radix:
     name: Deploy to Radix - ${{ inputs.radix-environment }}
