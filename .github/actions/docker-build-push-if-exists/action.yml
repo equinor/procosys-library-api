@@ -30,12 +30,14 @@ runs:
 
     - name: Build and push Docker image
       if: steps.check-image.outputs.image-exists == 'false'
-      shell: bash
-      run: |
-        IMAGE="procosys.azurecr.io/library/api"
-        docker build -f src/Equinor.Procosys.Library.WebApi/Dockerfile -t "$IMAGE:${{ inputs.image-tag }}" -t "$IMAGE:latest" src
-        docker push "$IMAGE:${{ inputs.image-tag }}"
-        docker push "$IMAGE:latest"
+      uses: docker/build-push-action@v6
+      with:
+        context: src
+        file: src/Equinor.Procosys.Library.WebApi/Dockerfile
+        push: true
+        tags: |
+          procosys.azurecr.io/library/api:${{ inputs.image-tag }}
+          procosys.azurecr.io/library/api:latest
 
     - name: Set build status
       id: build-status
