@@ -34,10 +34,3 @@ jobs:
 
       - name: Run tests - ${{ matrix.test-project }}
         run: dotnet test src/Tests/${{ matrix.test-project }}/${{ matrix.test-project }}.csproj --configuration Release --no-restore --verbosity normal --logger trx
-
-      - name: Upload test results
-        if: always()
-        uses: actions/upload-artifact@v4
-        with:
-          name: test-results-${{ matrix.test-project }}
-          path: src/Tests/${{ matrix.test-project }}/TestResults/
