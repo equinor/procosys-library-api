@@ -36,7 +36,7 @@ namespace Equinor.Procosys.Library.Query.Tests.GetAllAreas
                 $"?plantId={Plant}" +
                 $"&api-version={options.ApiVersion}";
 
-           var  areas = new List<MainApiArea>
+            var areas = new List<MainApiArea>
                 {
                     new MainApiArea
                     {

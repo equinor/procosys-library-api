@@ -34,7 +34,7 @@ namespace Equinor.Procosys.Library.WebApi.Tests.Authorizations
             // Arrange
             _mainApiClient
                 .SetupSequence(x => x.QueryAndDeserializeAsync<List<string>>(It.IsAny<string>()))
-                .Returns(Task.FromResult(new List<string>{ "A", "B", "C" }));
+                .Returns(Task.FromResult(new List<string> { "A", "B", "C" }));
             // Act
             var result = await _dut.GetPermissionsAsync(_plant);
 

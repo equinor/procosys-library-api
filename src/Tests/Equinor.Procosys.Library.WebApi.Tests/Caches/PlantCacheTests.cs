@@ -18,8 +18,8 @@ namespace Equinor.Procosys.Library.WebApi.Tests.Caches
     {
         private readonly Guid _currentUserOid = new Guid("12345678-1234-1234-1234-123456789123");
         private Mock<IPlantApiService> _plantApiServiceMock;
-        private readonly string Plant1 = "P1";
-        private readonly string Plant2 = "P2";
+        private readonly string _plant1 = "P1";
+        private readonly string _plant2 = "P2";
 
         private PlantCache _dut;
 
@@ -34,7 +34,7 @@ namespace Equinor.Procosys.Library.WebApi.Tests.Caches
 
             _plantApiServiceMock = new Mock<IPlantApiService>();
             _plantApiServiceMock.Setup(p => p.GetPlantsAsync()).Returns(Task.FromResult(
-                new List<ProcosysPlant> {new ProcosysPlant {Id = Plant1}, new ProcosysPlant {Id = Plant2}}));
+                new List<ProcosysPlant> { new ProcosysPlant { Id = _plant1 }, new ProcosysPlant { Id = _plant2 } }));
 
             _dut = new PlantCache(new CacheManager(), _plantApiServiceMock.Object, optionsMock.Object);
         }
@@ -68,7 +68,7 @@ namespace Equinor.Procosys.Library.WebApi.Tests.Caches
         public async Task IsValidPlantForUser_ShouldReturnTrue_WhenKnownPlant()
         {
             // Act
-            var result = await _dut.IsValidPlantForUserAsync(Plant2, _currentUserOid);
+            var result = await _dut.IsValidPlantForUserAsync(_plant2, _currentUserOid);
 
             // Assert
             Assert.IsTrue(result);
@@ -88,7 +88,7 @@ namespace Equinor.Procosys.Library.WebApi.Tests.Caches
         public async Task IsValidPlantForUser_ShouldReturnPlantIdsFromPlantApiServiceFirstTime()
         {
             // Act
-            await _dut.IsValidPlantForUserAsync(Plant2, _currentUserOid);
+            await _dut.IsValidPlantForUserAsync(_plant2, _currentUserOid);
 
             // Assert
             _plantApiServiceMock.Verify(p => p.GetPlantsAsync(), Times.Once);
@@ -99,7 +99,7 @@ namespace Equinor.Procosys.Library.WebApi.Tests.Caches
         {
             await _dut.IsValidPlantForUserAsync("ABC", _currentUserOid);
             // Act
-            await _dut.IsValidPlantForUserAsync(Plant2, _currentUserOid);
+            await _dut.IsValidPlantForUserAsync(_plant2, _currentUserOid);
 
             // Assert
             _plantApiServiceMock.Verify(p => p.GetPlantsAsync(), Times.Once);
@@ -109,7 +109,7 @@ namespace Equinor.Procosys.Library.WebApi.Tests.Caches
         public async Task Clear_ShouldForceGettingPlantsFromApiServiceAgain()
         {
             // Arrange
-            var result = await _dut.IsValidPlantForUserAsync(Plant2, _currentUserOid);
+            var result = await _dut.IsValidPlantForUserAsync(_plant2, _currentUserOid);
             Assert.IsTrue(result);
             _plantApiServiceMock.Verify(p => p.GetPlantsAsync(), Times.Once);
 
@@ -117,7 +117,7 @@ namespace Equinor.Procosys.Library.WebApi.Tests.Caches
             _dut.Clear(_currentUserOid);
 
             // Assert
-            result = await _dut.IsValidPlantForUserAsync(Plant2, _currentUserOid);
+            result = await _dut.IsValidPlantForUserAsync(_plant2, _currentUserOid);
             Assert.IsTrue(result);
             _plantApiServiceMock.Verify(p => p.GetPlantsAsync(), Times.Exactly(2));
         }
@@ -125,8 +125,8 @@ namespace Equinor.Procosys.Library.WebApi.Tests.Caches
         private void AssertPlants(IList<string> result)
         {
             Assert.AreEqual(2, result.Count);
-            Assert.AreEqual(Plant1, result.First());
-            Assert.AreEqual(Plant2, result.Last());
+            Assert.AreEqual(_plant1, result.First());
+            Assert.AreEqual(_plant2, result.Last());
         }
     }
 }

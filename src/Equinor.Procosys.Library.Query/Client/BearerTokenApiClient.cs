@@ -23,7 +23,7 @@ namespace Equinor.Procosys.Library.Query.Client
             _httpClientFactory = httpClientFactory;
             _bearerTokenProvider = bearerTokenProvider;
             _logger = logger;
-    }
+        }
 
         public async Task<T> QueryAndDeserializeAsync<T>(string url)
         {

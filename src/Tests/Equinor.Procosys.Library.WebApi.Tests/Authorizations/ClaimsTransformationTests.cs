@@ -15,9 +15,9 @@ namespace Equinor.Procosys.Library.WebApi.Tests.Authorizations
     public class ClaimsTransformationTests
     {
         private ClaimsTransformation _dut;
-        private Guid Oid = new Guid("{0B627D64-8113-40E1-9394-60282FB6BB9F}");
+        private Guid _oid = new Guid("{0B627D64-8113-40E1-9394-60282FB6BB9F}");
         private ClaimsPrincipal _principalWithOid;
-        private readonly string Plant = "P";
+        private readonly string _plant = "P";
         private readonly string _tagReadPermission = "TAG/READ";
         private Mock<IPlantProvider> _plantProviderMock;
         private Mock<IPlantCache> _plantCacheMock;
@@ -26,20 +26,20 @@ namespace Equinor.Procosys.Library.WebApi.Tests.Authorizations
         public void Setup()
         {
             _plantProviderMock = new Mock<IPlantProvider>();
-            _plantProviderMock.SetupGet(p => p.Plant).Returns(Plant);
+            _plantProviderMock.SetupGet(p => p.Plant).Returns(_plant);
 
             _plantCacheMock = new Mock<IPlantCache>();
-            _plantCacheMock.Setup(p => p.IsValidPlantForUserAsync(Plant, Oid)).Returns(Task.FromResult(true));
+            _plantCacheMock.Setup(p => p.IsValidPlantForUserAsync(_plant, _oid)).Returns(Task.FromResult(true));
 
             var permissionCacheMock = new Mock<IPermissionCache>();
-            permissionCacheMock.Setup(p => p.GetPermissionsForUserAsync(Plant, Oid))
-                .Returns(Task.FromResult<IList<string>>(new List<string> {_tagReadPermission, Permissions.LIBRARY_GENERAL_READ, Permissions.LIBRARY_GENERAL_WRITE}));
+            permissionCacheMock.Setup(p => p.GetPermissionsForUserAsync(_plant, _oid))
+                .Returns(Task.FromResult<IList<string>>(new List<string> { _tagReadPermission, Permissions.LIBRARY_GENERAL_READ, Permissions.LIBRARY_GENERAL_WRITE }));
 
             _principalWithOid = new ClaimsPrincipal();
             var claimsIdentity = new ClaimsIdentity();
-            claimsIdentity.AddClaim(new Claim(ClaimsExtensions.OidType, Oid.ToString()));
+            claimsIdentity.AddClaim(new Claim(ClaimsExtensions.OidType, _oid.ToString()));
             _principalWithOid.AddIdentity(claimsIdentity);
-            
+
             _dut = new ClaimsTransformation(_plantProviderMock.Object, _plantCacheMock.Object, permissionCacheMock.Object);
         }
 

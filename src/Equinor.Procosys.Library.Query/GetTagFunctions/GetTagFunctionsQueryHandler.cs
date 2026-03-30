@@ -27,7 +27,7 @@ namespace Equinor.Procosys.Library.Query.GetTagFunctions
 
         public async Task<Result<IEnumerable<TagFunctionDto>>> Handle(GetTagFunctionsQuery request, CancellationToken cancellationToken)
         {
-            var url = $"{ _baseAddress}Library/TagFunctions" +
+            var url = $"{_baseAddress}Library/TagFunctions" +
                 $"?plantId={request.Plant}" +
                 $"&registerCode={request.RegisterCode}" +
                 $"&api-version={_apiVersion}";

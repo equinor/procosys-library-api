@@ -42,7 +42,7 @@ namespace Equinor.Procosys.Library.Query.Tests.GetTagFunctions
                 $"&registerCode={_request.RegisterCode}" +
                 $"&api-version={options.ApiVersion}";
 
-           var tagFunctions = new List<MainApiTagFunction>
+            var tagFunctions = new List<MainApiTagFunction>
                 {
                     new MainApiTagFunction
                     {

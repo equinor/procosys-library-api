@@ -26,7 +26,7 @@ namespace Equinor.Procosys.Library.Infrastructure.Tests.Caching
         {
             // Act
             var result = _dut.GetOrCreate("A", () => "B", CacheDuration.Minutes, 2);
-            
+
             // Assert
             Assert.AreEqual("B", result);
         }
@@ -39,7 +39,7 @@ namespace Equinor.Procosys.Library.Infrastructure.Tests.Caching
 
             // Act
             var result = _dut.GetOrCreate("A", () => "C", CacheDuration.Minutes, 2);
-            
+
             // Assert
             Assert.AreEqual("B", result);
             result = _dut.Get<string>("A");
@@ -52,10 +52,10 @@ namespace Equinor.Procosys.Library.Infrastructure.Tests.Caching
             // Arrange
             _dut.GetOrCreate("A", () => "C", CacheDuration.Seconds, 1);
             _timeProvider.Elapse(TimeSpan.FromSeconds(2));
-            
+
             // Act
             var result = _dut.GetOrCreate("A", () => "B", CacheDuration.Minutes, 2);
-            
+
             // Assert
             Assert.AreEqual("B", result);
             result = _dut.Get<string>("A");
@@ -67,10 +67,10 @@ namespace Equinor.Procosys.Library.Infrastructure.Tests.Caching
         {
             // Arrange
             _dut.GetOrCreate("A", () => "B", CacheDuration.Minutes, 2);
-            
+
             // Act
             var result = _dut.Get<string>("A");
-            
+
             // Assert
             Assert.AreEqual("B", result);
         }
@@ -80,7 +80,7 @@ namespace Equinor.Procosys.Library.Infrastructure.Tests.Caching
         {
             // Act
             var result = _dut.Get<string>("A");
-            
+
             // Assert
             Assert.IsNull(result);
         }
