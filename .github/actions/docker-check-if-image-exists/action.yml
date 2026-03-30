@@ -1,4 +1,4 @@
-name: Check if a Docker Image Exists
+name: 🐳 Check if a Docker Image Exists
 description: Returns true or false indicating if a Docker image with the specified tag exists in the Container Registry.
 
 inputs:

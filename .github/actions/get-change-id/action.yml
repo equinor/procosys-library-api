@@ -1,4 +1,4 @@
-name: Get Change ID
+name: 🔖 Get Change ID
 description: Extract Git SHA short hash (7 chars) for image tagging
 
 outputs:

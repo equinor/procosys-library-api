@@ -1,4 +1,4 @@
-name: Builds and Pushes Docker Image if it Does Not Exist
+name: 🐳 Build and Push Docker Image if Missing
 description: Builds and pushes a Docker image to the Container Registry if it does not already exist.
 
 inputs:

@@ -1,4 +1,4 @@
-name: Deploy to Radix (Reusable)
+name: 🚀 Deploy to Environment
 
 on:
   workflow_call:
@@ -11,6 +11,11 @@ on:
         description: Radix environment name
         required: true
         type: string
+      ref:
+        description: Git ref (commit SHA, tag, or branch) to deploy
+        required: false
+        type: string
+        default: ''
 
 permissions:
   id-token: write
@@ -21,13 +26,17 @@ jobs:
     name: Build and Push Docker Image
     runs-on: ubuntu-latest
     outputs:
-      image-tag: ${{ steps.change-id.outputs.change-id }}
+      image-tag: ${{ steps.commit.outputs.sha }}
     steps:
       - uses: actions/checkout@v4
+        with:
+          ref: ${{ inputs.ref != '' && inputs.ref || github.sha }}
 
-      - name: Get change ID
-        id: change-id
-        uses: ./.github/actions/get-change-id
+      - name: Get commit SHA
+        id: commit
+        shell: bash
+        run: |
+          echo "sha=$(git rev-parse --short HEAD)" >> $GITHUB_OUTPUT
 
       - name: Setup .NET for Dockerfile build
         uses: actions/setup-dotnet@v4
@@ -45,7 +54,7 @@ jobs:
         id: docker-build
         uses: ./.github/actions/docker-build-push-if-not-exists
         with:
-          tag: ${{ steps.change-id.outputs.change-id }}
+          tag: ${{ steps.commit.outputs.sha }}
 
   deploy-to-radix:
     name: Deploy to Radix - ${{ inputs.radix-environment }}
@@ -63,7 +72,7 @@ jobs:
       - name: Deploy via Radix CLI
         shell: bash
         run: |
-            rx create job deploy \
+          rx create job deploy \
             --application procosys-library-api \
             --from-config \
             --environment ${{ inputs.radix-environment }} \

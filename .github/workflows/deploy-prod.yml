@@ -1,7 +1,9 @@
-name: Deploy to Prod
+name: 🚀🏭 Deploy to Prod
 
 on:
-  workflow_dispatch:
+  push:
+    branches:
+      - main
 
 jobs:
   deploy:

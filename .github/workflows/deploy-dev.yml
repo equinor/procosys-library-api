@@ -1,6 +1,7 @@
-name: Deploy to Dev
+name: 🚀🔬 Deploy to Dev
 
 on:
+  pull_request:
   workflow_dispatch:
 
 jobs:
