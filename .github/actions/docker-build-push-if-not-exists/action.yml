@@ -6,11 +6,6 @@ inputs:
     description: Docker image tag to check, build, and push
     required: true
 
-outputs:
-  image-built:
-    description: Boolean indicating if image was built (true) or skipped (false)
-    value: ${{ steps.build-status.outputs.image-built }}
-
 runs:
   using: composite
   steps:
@@ -20,27 +15,8 @@ runs:
       with:
         tag: ${{ inputs.tag }}
 
-    - name: Log check result
-      shell: bash
-      run: |
-        if [ "${{ steps.check-image.outputs.image-exists }}" = "true" ]; then
-          echo "Image procosys.azurecr.io/library/api:${{ inputs.tag }} already exists in ACR"
-        else
-          echo "Image does not exist; will build and push"
-        fi
-
     - name: Build and push image
       if: steps.check-image.outputs.image-exists == 'false'
       uses: ./.github/actions/docker-build-push
       with:
         tag: ${{ inputs.tag }}
-
-    - name: Set build status
-      id: build-status
-      shell: bash
-      run: |
-        if [ "${{ steps.check-image.outputs.image-exists }}" = "false" ]; then
-          echo "image-built=true" >> $GITHUB_OUTPUT
-        else
-          echo "image-built=false" >> $GITHUB_OUTPUT
-        fi
