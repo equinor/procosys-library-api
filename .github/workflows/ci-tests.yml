@@ -1,0 +1,43 @@
+name: CI - Run Tests
+
+on:
+  pull_request:
+    types:
+      - opened
+      - synchronize
+    branches:
+      - main
+      - master
+
+jobs:
+  test:
+    name: Unit Tests
+    runs-on: ubuntu-latest
+    strategy:
+      matrix:
+        test-project:
+          - Equinor.Procosys.Library.Command.Tests
+          - Equinor.Procosys.Library.Domain.Tests
+          - Equinor.Procosys.Library.Infrastructure.Tests
+          - Equinor.Procosys.Library.Query.Tests
+          - Equinor.Procosys.Library.WebApi.Tests
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: Setup .NET
+        uses: actions/setup-dotnet@v4
+        with:
+          dotnet-version: 8.0.x
+
+      - name: Restore dependencies
+        run: dotnet restore src/Equinor.Procosys.Library.sln
+
+      - name: Run tests - ${{ matrix.test-project }}
+        run: dotnet test src/Tests/${{ matrix.test-project }}/${{ matrix.test-project }}.csproj --configuration Release --no-restore --verbosity normal --logger trx
+
+      - name: Upload test results
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: test-results-${{ matrix.test-project }}
+          path: src/Tests/${{ matrix.test-project }}/TestResults/

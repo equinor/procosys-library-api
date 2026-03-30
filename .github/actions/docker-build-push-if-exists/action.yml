@@ -1,0 +1,48 @@
+name: Docker Build and Push (Idempotent)
+description: Check if Docker image exists in ACR; build and push only if it does not exist
+
+inputs:
+  image-tag:
+    description: Image tag (e.g., abc1234)
+    required: true
+
+outputs:
+  image-built:
+    description: Boolean indicating if image was built (true) or skipped (false)
+    value: ${{ steps.build-status.outputs.image-built }}
+
+runs:
+  using: composite
+  steps:
+    - name: Check if image exists in ACR
+      id: check-image
+      shell: bash
+      run: |
+        ACR_NAME="procosys"
+        IMAGE_REPO="library/api"
+        IMAGE_EXISTS=$(az acr repository show --name "$ACR_NAME" --repository "$IMAGE_REPO" --image "${{ inputs.image-tag }}" 2>/dev/null && echo "true" || echo "false")
+        echo "image-exists=$IMAGE_EXISTS" >> $GITHUB_OUTPUT
+        if [ "$IMAGE_EXISTS" = "true" ]; then
+          echo "Image procosys.azurecr.io/library/api:${{ inputs.image-tag }} already exists in ACR"
+        else
+          echo "Image does not exist; will build and push"
+        fi
+
+    - name: Build and push Docker image
+      if: steps.check-image.outputs.image-exists == 'false'
+      shell: bash
+      run: |
+        IMAGE="procosys.azurecr.io/library/api"
+        docker build -f src/Equinor.Procosys.Library.WebApi/Dockerfile -t "$IMAGE:${{ inputs.image-tag }}" -t "$IMAGE:latest" src
+        docker push "$IMAGE:${{ inputs.image-tag }}"
+        docker push "$IMAGE:latest"
+
+    - name: Set build status
+      id: build-status
+      shell: bash
+      run: |
+        if [ "${{ steps.check-image.outputs.image-exists }}" = "false" ]; then
+          echo "image-built=true" >> $GITHUB_OUTPUT
+        else
+          echo "image-built=false" >> $GITHUB_OUTPUT
+        fi
