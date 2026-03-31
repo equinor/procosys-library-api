@@ -7,8 +7,6 @@ spec:
     useBuildKit: true
   environments:
   - name: dev
-    build:
-      from: ci/pipeline-migration-radix-build
   - name: test
   - name: prod
 
