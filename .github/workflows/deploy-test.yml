@@ -12,4 +12,6 @@ jobs:
     with:
       environment: test
       radix-environment: test
+      branch: ${{ github.ref_name }}
+      commit-id: ${{ github.sha }}
     secrets: inherit

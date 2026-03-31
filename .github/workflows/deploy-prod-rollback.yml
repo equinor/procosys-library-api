@@ -14,5 +14,6 @@ jobs:
     with:
       environment: prod-rollback
       radix-environment: prod
-      ref: ${{ inputs.ref }}
+      branch: main
+      commit-id: ${{ inputs.ref }}
     secrets: inherit

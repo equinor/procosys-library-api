@@ -30,7 +30,6 @@ spec:
       identity:
         azure:
           clientId: fdf5086c-009f-4407-b7bb-d2ece26dea45
-      imageTagName: latest
       variables:
         ASPNETCORE_ENVIRONMENT: 'Development'
         UseAzureAppConfiguration: 'true'
@@ -76,9 +75,4 @@ spec:
         limits:
           memory: '256Mi'
           cpu: '500m'
-  #--------------------------------
-  # External docker image registry
-  #--------------------------------
-  privateImageHubs:
-    procosys.azurecr.io:
-      username: radix-pcs-library
+

@@ -11,4 +11,6 @@ jobs:
     with:
       environment: prod
       radix-environment: prod
+      branch: ${{ github.ref_name }}
+      commit-id: ${{ github.sha }}
     secrets: inherit
