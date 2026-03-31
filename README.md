@@ -12,7 +12,6 @@ Library REST-API for Project Completion System (ProCoSys)
 | 🚀🔬 Deploy to Dev | Pull request, manual | Deploys to Radix dev environment |
 | 🚀🧪 Deploy to Test | Push to main, manual | Deploys to Radix test environment |
 | 🚀🏭 Deploy to Prod | Push to main | Deploys to Radix prod environment |
-| 🔁🏭 Deploy to Prod (Rollback) | Manual with git ref | Rolls back prod to a specific commit |
 
 > **Important:** Merging a PR to `main` automatically deploys to both **test** and **prod**.
 
@@ -28,9 +27,7 @@ Library REST-API for Project Completion System (ProCoSys)
 
 1. PR is merged to `main`
 2. **Test** and **prod** environments are deployed automatically
-3. If a rollback is needed, use the **Deploy to Prod (Rollback)** workflow with the target commit SHA
 
 ## Manual Deployment
 
 - **Dev/Test**: Trigger the deploy workflow manually from the Actions tab
-- **Prod rollback**: Run "Deploy to Prod (Rollback)" with a git ref (commit SHA, tag, or branch)
