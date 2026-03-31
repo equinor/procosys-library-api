@@ -8,7 +8,10 @@ spec:
   environments:
   - name: dev
     build:
-      fromType: branch
+      subPipeline:
+        identity:
+          azure:
+            clientId: fdf5086c-009f-4407-b7bb-d2ece26dea45
   - name: test
   - name: prod
 
