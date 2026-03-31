@@ -1,7 +1,7 @@
 apiVersion: radix.equinor.com/v1
 kind: RadixApplication
 metadata:
-  name: procosys-library-api-build-test
+  name: procosys-library-api
 spec:
   build:
     useBuildKit: true
