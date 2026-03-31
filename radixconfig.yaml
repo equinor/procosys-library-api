@@ -8,10 +8,8 @@ spec:
   environments:
   - name: dev
     build:
-      from: '*'
+      fromType: branch
   - name: test
-    build:
-      from: '*'
   - name: prod
 
   components:
