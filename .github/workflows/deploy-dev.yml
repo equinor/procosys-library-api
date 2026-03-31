@@ -11,5 +11,4 @@ jobs:
       environment: dev
       radix-environment: dev
       branch: ${{ github.head_ref || github.ref_name }}
-      commit-id: ${{ github.event.pull_request.head.sha || github.sha }}
     secrets: inherit

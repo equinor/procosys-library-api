@@ -15,10 +15,6 @@ on:
         description: Git branch to build and deploy
         required: true
         type: string
-      commit-id:
-        description: Git commit SHA to build
-        required: true
-        type: string
 
 permissions:
   id-token: write
@@ -36,7 +32,6 @@ jobs:
           echo "environment: ${{ inputs.environment }}"
           echo "radix-environment: ${{ inputs.radix-environment }}"
           echo "branch: ${{ inputs.branch }}"
-          echo "commit-id: ${{ inputs.commit-id }}"
 
       - uses: actions/checkout@v4
 
@@ -54,5 +49,4 @@ jobs:
             --context playground \
             --branch ${{ inputs.branch }} \
             --environment ${{ inputs.radix-environment }} \
-            --commitID ${{ inputs.commit-id }} \
             --follow
