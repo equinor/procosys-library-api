@@ -30,6 +30,14 @@ jobs:
     environment: ${{ inputs.environment }}
     runs-on: ubuntu-latest
     steps:
+      - name: Print input values
+        shell: bash
+        run: |
+          echo "environment: ${{ inputs.environment }}"
+          echo "radix-environment: ${{ inputs.radix-environment }}"
+          echo "branch: ${{ inputs.branch }}"
+          echo "commit-id: ${{ inputs.commit-id }}"
+
       - uses: actions/checkout@v4
 
       - name: Authenticate with Radix
