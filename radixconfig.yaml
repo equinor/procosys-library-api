@@ -3,8 +3,12 @@ kind: RadixApplication
 metadata:
   name: procosys-library-api-build-test
 spec:
+  build:
+    useBuildKit: true
   environments:
   - name: dev
+    build:
+      from: ci/pipeline-migration-radix-build
   - name: test
   - name: prod
 
@@ -14,7 +18,8 @@ spec:
   #---------- 
 
   - name: backend
-    image: procosys.azurecr.io/library/api:{imageTagName}
+    src: .
+    dockerfileName: src/Equinor.Procosys.Library.WebApi/Dockerfile
     ports:
     - name: http
       port: 5000
