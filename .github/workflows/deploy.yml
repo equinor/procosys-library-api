@@ -51,6 +51,7 @@ jobs:
         run: |
           rx create pipeline-job build-deploy \
             --application procosys-library-api-build-test \
+            --context playground \
             --branch ${{ inputs.branch }} \
             --environment ${{ inputs.radix-environment }} \
             --commitID ${{ inputs.commit-id }} \
