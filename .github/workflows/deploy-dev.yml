@@ -9,6 +9,5 @@ jobs:
     uses: ./.github/workflows/deploy.yml
     with:
       environment: dev
-      radix-environment: dev
       branch: ${{ github.head_ref || github.ref_name }}
     secrets: inherit

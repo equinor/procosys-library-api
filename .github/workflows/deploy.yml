@@ -7,10 +7,6 @@ on:
         description: GitHub environment name (dev, test, prod)
         required: true
         type: string
-      radix-environment:
-        description: Radix environment name
-        required: true
-        type: string
       branch:
         description: Git branch to build and deploy
         required: true
@@ -22,7 +18,7 @@ permissions:
 
 jobs:
   build-and-deploy:
-    name: Build and Deploy to Radix - ${{ inputs.radix-environment }}
+    name: Build and Deploy to Radix - ${{ inputs.environment }}
     environment: ${{ inputs.environment }}
     runs-on: ubuntu-latest
     steps:
@@ -38,8 +34,7 @@ jobs:
         shell: bash
         run: |
           rx create pipeline-job build-deploy \
-            --application procosys-library-api-build-test \
-            --context playground \
+            --application procosys-library-api \
             --branch ${{ inputs.branch }} \
-            --environment ${{ inputs.radix-environment }} \
+            --environment ${{ inputs.environment }} \
             --follow

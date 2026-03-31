@@ -11,6 +11,5 @@ jobs:
     uses: ./.github/workflows/deploy.yml
     with:
       environment: test
-      radix-environment: test
       branch: ${{ github.ref_name }}
     secrets: inherit
