@@ -7,7 +7,11 @@ spec:
     useBuildKit: true
   environments:
   - name: dev
+    build:
+      from: '*'
   - name: test
+    build:
+      from: '*'
   - name: prod
 
   components:
@@ -27,8 +31,6 @@ spec:
     environmentConfig:
     # Development environment
     - environment: dev
-      build:
-        from: '*'
       identity:
         azure:
           clientId: fdf5086c-009f-4407-b7bb-d2ece26dea45
