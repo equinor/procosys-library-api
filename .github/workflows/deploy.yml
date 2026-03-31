@@ -50,7 +50,7 @@ jobs:
         shell: bash
         run: |
           rx create pipeline-job build-deploy \
-            --application procosys-library-api-build-test \ 
+            --application procosys-library-api-build-test \
             --branch ${{ inputs.branch }} \
             --environment ${{ inputs.radix-environment }} \
             --commitID ${{ inputs.commit-id }} \
