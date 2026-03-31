@@ -7,75 +7,33 @@ on:
         description: GitHub environment name (dev, test, prod)
         required: true
         type: string
-      radix-environment:
-        description: Radix environment name
+      branch:
+        description: Git branch to build and deploy
         required: true
         type: string
-      ref:
-        description: Git ref (commit SHA, tag, or branch) to deploy
-        required: false
-        type: string
-        default: ''
 
 permissions:
   id-token: write
   contents: read
 
 jobs:
-  build-and-push-image:
-    name: Build and Push Docker Image
-    runs-on: ubuntu-latest
-    outputs:
-      image-tag: ${{ steps.commit.outputs.sha }}
-    steps:
-      - uses: actions/checkout@v4
-        with:
-          ref: ${{ inputs.ref != '' && inputs.ref || github.sha }}
-
-      - name: Get commit SHA
-        id: commit
-        shell: bash
-        run: |
-          echo "sha=$(git rev-parse --short HEAD)" >> $GITHUB_OUTPUT
-
-      - name: Setup .NET for Dockerfile build
-        uses: actions/setup-dotnet@v4
-        with:
-          dotnet-version: 8.0.x
-
-      - name: Azure Login
-        uses: azure/login@v2
-        with:
-          client-id: ${{ vars.AZURE_CLIENT_ID }}
-          tenant-id: ${{ vars.AZURE_TENANT_ID }}
-          allow-no-subscriptions: true
-
-      - name: Build and push Docker image
-        id: docker-build
-        uses: ./.github/actions/docker-build-push-if-not-exists
-        with:
-          tag: ${{ steps.commit.outputs.sha }}
-
-  deploy-to-radix:
-    name: Deploy to Radix - ${{ inputs.radix-environment }}
-    needs: build-and-push-image
+  build-and-deploy:
+    name: Build and Deploy to Radix - ${{ inputs.environment }}
     environment: ${{ inputs.environment }}
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v4
 
-      - name: Deploy to Radix
+      - name: Authenticate with Radix
         uses: equinor/radix-github-actions@v2
         with:
           azure_client_id: ${{ vars.AZURE_CLIENT_ID }}
 
-      - name: Deploy via Radix CLI
+      - name: Build and deploy via Radix CLI
         shell: bash
         run: |
-          rx create job deploy \
+          rx create pipeline-job build-deploy \
             --application procosys-library-api \
-            --from-config \
-            --environment ${{ inputs.radix-environment }} \
-            --component backend \
-            --image-tag-name backend=${{ needs.build-and-push-image.outputs.image-tag }} \
+            --branch ${{ inputs.branch }} \
+            --environment ${{ inputs.environment }} \
             --follow

@@ -10,5 +10,5 @@ jobs:
     uses: ./.github/workflows/deploy.yml
     with:
       environment: prod
-      radix-environment: prod
+      branch: ${{ github.ref_name }}
     secrets: inherit

@@ -1,12 +1,20 @@
 apiVersion: radix.equinor.com/v1
 kind: RadixApplication
 metadata:
-  name: procosys-library-api
+  name: procosys-library-api-build-test
 spec:
+  build:
+    useBuildKit: true
   environments:
   - name: dev
+    build:
+      from: '*'
   - name: test
+    build:
+      from: '*'
   - name: prod
+    build:
+      from: 'main'
 
   components:
   # ---------
@@ -14,7 +22,8 @@ spec:
   #---------- 
 
   - name: backend
-    image: procosys.azurecr.io/library/api:{imageTagName}
+    src: ./src
+    dockerfileName: Equinor.Procosys.Library.WebApi/Dockerfile
     ports:
     - name: http
       port: 5000
@@ -27,7 +36,6 @@ spec:
       identity:
         azure:
           clientId: fdf5086c-009f-4407-b7bb-d2ece26dea45
-      imageTagName: latest
       variables:
         ASPNETCORE_ENVIRONMENT: 'Development'
         UseAzureAppConfiguration: 'true'
@@ -73,9 +81,4 @@ spec:
         limits:
           memory: '256Mi'
           cpu: '500m'
-  #--------------------------------
-  # External docker image registry
-  #--------------------------------
-  privateImageHubs:
-    procosys.azurecr.io:
-      username: radix-pcs-library
+

@@ -22,5 +22,4 @@ flowchart LR
     Review --> Merge[Merge to main]
     Merge --> Test[Deploy to Test]
     Merge --> Prod[Deploy to Prod]
-    Prod -.-> Rollback[Manual Rollback]
 ```
