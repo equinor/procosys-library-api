@@ -13,9 +13,9 @@ namespace Equinor.Procosys.Library.WebApi.Behaviors
 
         public async Task<TResponse> Handle(TRequest request, RequestHandlerDelegate<TResponse> next, CancellationToken cancellationToken)
         {
-            _logger.LogInformation("----- Handling command {CommandName} ({@Command})", request.GetGenericTypeName(), request);
+            _logger.LogInformation("----- TODO Handling command {CommandName} ({@Command})", request.GetGenericTypeName(), request);
             var response = await next();
-            _logger.LogInformation("----- Command {CommandName} handled - response: {@Response}", request.GetGenericTypeName(), response);
+            _logger.LogInformation("----- TODO Command {CommandName} handled - response: {@Response}", request.GetGenericTypeName(), response);
 
             return response;
         }
