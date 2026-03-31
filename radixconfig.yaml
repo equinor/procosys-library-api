@@ -13,6 +13,8 @@ spec:
     build:
       from: '*'
   - name: prod
+    build:
+      from: 'main'
 
   components:
   # ---------
