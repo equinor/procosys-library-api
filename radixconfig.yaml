@@ -19,7 +19,7 @@ spec:
 
   - name: backend
     src: ./src
-    dockerfileName: src/Equinor.Procosys.Library.WebApi/Dockerfile
+    dockerfileName: Equinor.Procosys.Library.WebApi/Dockerfile
     ports:
     - name: http
       port: 5000
