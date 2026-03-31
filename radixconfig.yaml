@@ -27,7 +27,7 @@ spec:
     environmentConfig:
     # Development environment
     - environment: dev
-    build:
+      build:
         from: '*'
       identity:
         azure:
