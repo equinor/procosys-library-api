@@ -29,7 +29,6 @@ jobs:
         with:
           azure_client_id: ${{ vars.AZURE_CLIENT_ID }}
 
-      # TODO fix application
       - name: Build and deploy via Radix CLI
         shell: bash
         run: |
