@@ -1,7 +1,7 @@
 apiVersion: radix.equinor.com/v1
 kind: RadixApplication
 metadata:
-  name: procosys-library-api
+  name: procosys-library-api-build-test
 spec:
   environments:
   - name: dev
