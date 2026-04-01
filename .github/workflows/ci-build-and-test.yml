@@ -21,6 +21,7 @@ jobs:
           - Equinor.Procosys.Library.Infrastructure.Tests
           - Equinor.Procosys.Library.Query.Tests
           - Equinor.Procosys.Library.WebApi.Tests
+          - Todo.Remove.This.Failure.Test
     steps:
       - uses: actions/checkout@v4
 
