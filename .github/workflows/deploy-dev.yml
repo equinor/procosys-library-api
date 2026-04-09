@@ -1,0 +1,13 @@
+name: 🚀🔬 Deploy to Dev
+
+on:
+  pull_request:
+  workflow_dispatch:
+
+jobs:
+  deploy:
+    uses: ./.github/workflows/deploy.yml
+    with:
+      environment: dev
+      branch: ${{ github.head_ref || github.ref_name }}
+    secrets: inherit

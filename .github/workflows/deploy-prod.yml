@@ -1,0 +1,14 @@
+name: 🚀🏭 Deploy to Prod
+
+on:
+  push:
+    branches:
+      - main
+
+jobs:
+  deploy:
+    uses: ./.github/workflows/deploy.yml
+    with:
+      environment: prod
+      branch: ${{ github.ref_name }}
+    secrets: inherit

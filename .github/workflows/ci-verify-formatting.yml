@@ -1,0 +1,53 @@
+name: ✏️ Verify formatting
+
+on:
+  workflow_dispatch:
+  pull_request:
+    branches:
+      - main
+
+jobs:
+  format-check:
+    name: Verify formatting
+    runs-on: ubuntu-latest
+    strategy:
+      fail-fast: false
+      matrix:
+        project:
+          - Equinor.Procosys.Library.Command/Equinor.Procosys.Library.Command.csproj
+          - Equinor.Procosys.Library.Domain/Equinor.Procosys.Library.Domain.csproj
+          - Equinor.Procosys.Library.Infrastructure/Equinor.Procosys.Library.Infrastructure.csproj
+          - Equinor.Procosys.Library.Query/Equinor.Procosys.Library.Query.csproj
+          - Equinor.Procosys.Library.WebApi/Equinor.Procosys.Library.WebApi.csproj
+          - Tests/Equinor.Procosys.Library.Command.Tests/Equinor.Procosys.Library.Command.Tests.csproj
+          - Tests/Equinor.Procosys.Library.Domain.Tests/Equinor.Procosys.Library.Domain.Tests.csproj
+          - Tests/Equinor.Procosys.Library.Infrastructure.Tests/Equinor.Procosys.Library.Infrastructure.Tests.csproj
+          - Tests/Equinor.Procosys.Library.Query.Tests/Equinor.Procosys.Library.Query.Tests.csproj
+          - Tests/Equinor.Procosys.Library.WebApi.Tests/Equinor.Procosys.Library.WebApi.Tests.csproj
+          - Tests/Equinor.Procosys.Library.Test.Common/Equinor.Procosys.Library.Test.Common.csproj
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: Setup .NET
+        uses: actions/setup-dotnet@v4
+        with:
+          dotnet-version: 8.0.x
+
+      - name: Restore dependencies
+        run: dotnet restore src/Equinor.Procosys.Library.sln
+
+      - name: Verify formatting - ${{ matrix.project }}
+        run: dotnet format src/${{ matrix.project }} --verify-no-changes --verbosity normal
+
+  all-formatting-pass:
+    name: All Formatting Pass
+    runs-on: ubuntu-latest
+    needs: [format-check]
+    if: always()
+    steps:
+      - name: Check formatting results
+        run: |
+          if [ "${{ needs.format-check.result }}" != "success" ]; then
+            echo "One or more formatting jobs failed"
+            exit 1
+          fi

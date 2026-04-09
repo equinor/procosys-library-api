@@ -1,0 +1,49 @@
+name: 🤖 Build and Test
+
+on:
+  pull_request:
+    types:
+      - opened
+      - synchronize
+    branches:
+      - main
+
+jobs:
+  test:
+    name: Unit Tests
+    runs-on: ubuntu-latest
+    strategy:
+      fail-fast: false
+      matrix:
+        test-project:
+          - Equinor.Procosys.Library.Command.Tests
+          - Equinor.Procosys.Library.Domain.Tests
+          - Equinor.Procosys.Library.Infrastructure.Tests
+          - Equinor.Procosys.Library.Query.Tests
+          - Equinor.Procosys.Library.WebApi.Tests
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: Setup .NET
+        uses: actions/setup-dotnet@v4
+        with:
+          dotnet-version: 8.0.x
+
+      - name: Restore dependencies
+        run: dotnet restore src/Equinor.Procosys.Library.sln
+
+      - name: Run tests - ${{ matrix.test-project }}
+        run: dotnet test src/Tests/${{ matrix.test-project }}/${{ matrix.test-project }}.csproj --configuration Release --no-restore --verbosity normal --logger trx
+
+  all-tests-pass:
+    name: All Tests Pass
+    runs-on: ubuntu-latest
+    needs: [test]
+    if: always()
+    steps:
+      - name: Check test results
+        run: |
+          if [ "${{ needs.test.result }}" != "success" ]; then
+            echo "One or more test jobs failed"
+            exit 1
+          fi

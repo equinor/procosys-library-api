@@ -1,0 +1,39 @@
+name: 🚀 Deploy to Environment
+
+on:
+  workflow_call:
+    inputs:
+      environment:
+        description: GitHub environment name (dev, test, prod)
+        required: true
+        type: string
+      branch:
+        description: Git branch to build and deploy
+        required: true
+        type: string
+
+permissions:
+  id-token: write
+  contents: read
+
+jobs:
+  build-and-deploy:
+    name: Build and Deploy to Radix - ${{ inputs.environment }}
+    environment: ${{ inputs.environment }}
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: Authenticate with Radix
+        uses: equinor/radix-github-actions@v2
+        with:
+          azure_client_id: ${{ vars.AZURE_CLIENT_ID }}
+
+      - name: Build and deploy via Radix CLI
+        shell: bash
+        run: |
+          rx create pipeline-job build-deploy \
+            --application procosys-library-api \
+            --branch ${{ inputs.branch }} \
+            --environment ${{ inputs.environment }} \
+            --follow
